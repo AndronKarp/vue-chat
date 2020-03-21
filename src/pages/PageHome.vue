@@ -6,25 +6,11 @@
   >
     <v-container
       v-if="!isLoading"
-      class="py-10 d-flex flex-column align-center"
+      class="d-flex flex-column align-center"
       :class="{ 'justify-center': !doMessagesExist }"
       style="height: 100%"
     >
-      <v-list
-        v-if="doMessagesExist"
-        two-line
-        disabled
-        elevation="4"
-        min-width="280px"
-        style="width: 60%"
-      >
-        <v-list-item v-for="(message, index) in messages" :key="index">
-          <v-list-item-content>
-            <v-list-item-title>{{ message.name }}</v-list-item-title>
-            <v-list-item-subtitle>{{ message.text }}</v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
+      <MessageList v-if="doMessagesExist" />
       <div v-else>No messages yet!</div>
     </v-container>
     <v-progress-circular
@@ -36,32 +22,35 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { messagesRef } from "../configs/firebase";
+import MessageList from "../components/MessageList";
 
 export default {
   data() {
     return {
-      doMessagesExist: false,
       isLoading: true
     };
   },
   methods: {
-    ...mapActions(["addMessage"])
+    ...mapActions(["addMessage", "changeDoMessagesExistStatus"])
+  },
+  computed: {
+    ...mapGetters(["doMessagesExist"])
   },
   created() {
-    messagesRef.on("value", snapshot => {
-      if (snapshot.val()) {
+    messagesRef.once("value", snapshot => {
+      this.changeDoMessagesExistStatus(snapshot.val() != null);
+      if (this.doMessagesExist) {
         messagesRef.on("child_added", message => {
-          this.doMessagesExist = true;
-          this.addMessage({ ...message.val(), id: message.key });
+          this.addMessage(message.val());
         });
       }
       this.isLoading = false;
     });
   },
-  computed: {
-    ...mapGetters(["messages"])
+  components: {
+    MessageList
   }
 };
 </script>
