@@ -12,6 +12,7 @@
     >
       <MessageList v-if="doMessagesExist" />
       <div v-else>No messages yet!</div>
+      <SendMessageForm />
     </v-container>
     <v-progress-circular
       v-else
@@ -25,6 +26,7 @@
 import { mapActions, mapGetters } from "vuex";
 import { messagesRef } from "../configs/firebase";
 import MessageList from "../components/MessageList";
+import SendMessageForm from "../components/SendMessageForm";
 
 export default {
   data() {
@@ -50,7 +52,8 @@ export default {
     });
   },
   components: {
-    MessageList
+    MessageList,
+    SendMessageForm
   }
 };
 </script>
