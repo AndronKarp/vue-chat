@@ -17,6 +17,9 @@ export default {
     },
     saveDoMessagesExistNewStatus(state, status) {
       state.doMessagesExist = status;
+    },
+    removeFromMessages(state, index) {
+      state.messages.splice(index, 1);
     }
   },
   actions: {
@@ -25,6 +28,9 @@ export default {
     },
     changeDoMessagesExistStatus(store, status) {
       store.commit("saveDoMessagesExistNewStatus", status);
+    },
+    removeMessage(store, index) {
+      store.commit("removeFromMessages", index);
     }
   }
 };

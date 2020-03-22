@@ -27,6 +27,7 @@ import { mapActions, mapGetters } from "vuex";
 import { messagesRef } from "../configs/firebase";
 import MessageList from "../components/MessageList";
 import SendMessageForm from "../components/SendMessageForm";
+import firebaseEventsSetting from "../mixins/firebaseEventsSetting";
 
 export default {
   data() {
@@ -35,7 +36,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["addMessage", "changeDoMessagesExistStatus"])
+    ...mapActions(["changeDoMessagesExistStatus"])
   },
   computed: {
     ...mapGetters(["doMessagesExist"])
@@ -44,9 +45,7 @@ export default {
     messagesRef.once("value", snapshot => {
       this.changeDoMessagesExistStatus(snapshot.val() != null);
       if (this.doMessagesExist) {
-        messagesRef.on("child_added", message => {
-          this.addMessage({ ...message.val(), id: message.key });
-        });
+        this.setFirebaseEvents(messagesRef);
       }
       this.isLoading = false;
     });
@@ -54,7 +53,8 @@ export default {
   components: {
     MessageList,
     SendMessageForm
-  }
+  },
+  mixins: [firebaseEventsSetting]
 };
 </script>
 
