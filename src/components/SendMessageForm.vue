@@ -57,7 +57,7 @@ export default {
       messagesRef.push({ name: this.form.name, text: this.form.text });
       if (!this.doMessagesExist) {
         messagesRef.on("child_added", message => {
-          this.addMessage(message.val());
+          this.addMessage({ ...message.val(), id: message.key });
           this.changeDoMessagesExistStatus(true);
         });
       }

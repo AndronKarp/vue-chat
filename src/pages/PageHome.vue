@@ -45,7 +45,7 @@ export default {
       this.changeDoMessagesExistStatus(snapshot.val() != null);
       if (this.doMessagesExist) {
         messagesRef.on("child_added", message => {
-          this.addMessage(message.val());
+          this.addMessage({ ...message.val(), id: message.key });
         });
       }
       this.isLoading = false;
