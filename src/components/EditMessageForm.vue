@@ -34,7 +34,7 @@ export default {
     updateMessage(message) {
       messagesRef
         .child(message.id)
-        .update({ text: this.editingMessage.text })
+        .update({ text: this.message.text })
         .then(() => this.cancelEditing());
     }
   }
