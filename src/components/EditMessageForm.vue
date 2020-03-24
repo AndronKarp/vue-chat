@@ -5,7 +5,7 @@
         outlined
         dense
         clearable
-        v-model="message.text"
+        v-model="editingMessage.text"
       ></v-text-field>
     </v-list-item-title>
     <v-list-item-subtitle class="d-flex justify-center">
@@ -27,6 +27,11 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      editingMessage: { ...this.message }
+    };
+  },
   methods: {
     cancelEditing() {
       this.$emit("onCancelEditing");
@@ -34,7 +39,7 @@ export default {
     updateMessage(message) {
       messagesRef
         .child(message.id)
-        .update({ text: this.message.text })
+        .update({ text: this.editingMessage.text })
         .then(() => this.cancelEditing());
     }
   }
