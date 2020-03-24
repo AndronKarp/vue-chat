@@ -14,7 +14,7 @@
     </v-navigation-drawer>
     <v-app-bar app color="amber darken-4" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>Application</v-toolbar-title>
+      <v-toolbar-title>Vue Chat</v-toolbar-title>
     </v-app-bar>
     <v-content>
       <router-view></router-view>
