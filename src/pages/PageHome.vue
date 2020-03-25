@@ -1,17 +1,19 @@
 <template>
   <v-container
     class="d-flex flex-column align-center"
-    :class="{ 'justify-center': isLoading }"
+    :class="{ 'justify-center': !areMessagesLoaded }"
     style="height: 100%"
   >
     <v-container
-      v-if="!isLoading"
+      v-if="areMessagesLoaded"
       class="d-flex flex-column align-center"
-      :class="{ 'justify-center': !doMessagesExist }"
+      :class="{ 'justify-center': !messages.length }"
       style="height: 100%"
     >
-      <MessageList v-if="doMessagesExist" />
-      <div v-else>No messages yet!</div>
+      <MessageList v-if="messages.length" />
+      <v-container class="d-flex justify-center" v-else
+        >No messages yet!</v-container
+      >
       <SendMessageForm />
     </v-container>
     <v-progress-circular
@@ -23,38 +25,18 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
-import { messagesRef } from "../configs/firebase";
+import { mapGetters } from "vuex";
 import MessageList from "../components/MessageList";
 import SendMessageForm from "../components/SendMessageForm";
-import firebaseEventsSetting from "../mixins/firebaseEventsSetting";
 
 export default {
-  data() {
-    return {
-      isLoading: true
-    };
-  },
-  methods: {
-    ...mapActions(["changeDoMessagesExistStatus"])
-  },
   computed: {
-    ...mapGetters(["doMessagesExist"])
-  },
-  created() {
-    messagesRef.once("value", snapshot => {
-      this.changeDoMessagesExistStatus(snapshot.val() != null);
-      if (this.doMessagesExist) {
-        this.setFirebaseEvents(messagesRef);
-      }
-      this.isLoading = false;
-    });
+    ...mapGetters(["messages", "areMessagesLoaded"])
   },
   components: {
     MessageList,
     SendMessageForm
-  },
-  mixins: [firebaseEventsSetting]
+  }
 };
 </script>
 

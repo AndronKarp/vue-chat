@@ -31,8 +31,6 @@
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import { messagesRef } from "../configs/firebase";
-import { mapActions, mapGetters } from "vuex";
-import firebaseEventsSetting from "../mixins/firebaseEventsSetting";
 
 export default {
   data() {
@@ -49,21 +47,13 @@ export default {
       text: { required }
     }
   },
-  computed: {
-    ...mapGetters(["doMessagesExist"])
-  },
   methods: {
-    ...mapActions(["changeDoMessagesExistStatus"]),
     sendMessage() {
       messagesRef.push({ name: this.form.name, text: this.form.text });
       this.form.text = null;
-      if (!this.doMessagesExist) {
-        this.setFirebaseEvents(messagesRef);
-        this.changeDoMessagesExistStatus(true);
-      }
     }
   },
-  mixins: [validationMixin, firebaseEventsSetting]
+  mixins: [validationMixin]
 };
 </script>
 
