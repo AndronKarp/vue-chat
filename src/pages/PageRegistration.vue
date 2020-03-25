@@ -57,9 +57,10 @@
         >Sign Up</v-btn
       >
     </v-form>
-    <v-container class="d-flex justify-center" v-else
-      >Signed in as {{ currentUser.email }}</v-container
-    >
+    <v-container v-else class="d-flex flex-column justify-center align-center">
+      <p>Signed in as {{ currentUser.email }}</p>
+      <v-btn @click="logOut" color="amber darken-4" dark>Log Out</v-btn>
+    </v-container>
   </v-container>
 </template>
 
@@ -68,6 +69,7 @@ import { validationMixin } from "vuelidate";
 import * as validators from "vuelidate/lib/validators";
 import { auth } from "../configs/firebase";
 import { mapGetters } from "vuex";
+import logout from "../mixins/logout";
 
 export default {
   data() {
@@ -156,12 +158,12 @@ export default {
         this.form.email,
         this.form.password
       );
+      await auth().currentUser.updateProfile({ displayName: this.form.name });
       this.$router.push("/");
       this.isLoading = false;
-      auth().currentUser.updateProfile({ displayName: this.form.name });
     }
   },
-  mixins: [validationMixin]
+  mixins: [validationMixin, logout]
 };
 </script>
 

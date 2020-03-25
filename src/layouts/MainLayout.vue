@@ -31,6 +31,10 @@
     <v-app-bar app color="amber darken-4" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>Vue Chat</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn v-if="currentUser" @click="logOut" icon>
+        <v-icon>mdi-logout</v-icon>
+      </v-btn>
     </v-app-bar>
     <v-content>
       <router-view></router-view>
@@ -43,6 +47,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import logout from "../mixins/logout";
 
 export default {
   props: {
@@ -53,6 +58,7 @@ export default {
   }),
   computed: {
     ...mapGetters(["currentUser"])
-  }
+  },
+  mixins: [logout]
 };
 </script>

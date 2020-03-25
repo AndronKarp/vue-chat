@@ -35,9 +35,10 @@
         >Sign In</v-btn
       >
     </v-form>
-    <v-container v-else class="d-flex justify-center"
-      >Signed in as {{ currentUser.email }}</v-container
-    >
+    <v-container v-else class="d-flex flex-column justify-center align-center">
+      <p>Signed in as {{ currentUser.email }}</p>
+      <v-btn @click="logOut" color="amber darken-4" dark>Log Out</v-btn>
+    </v-container>
   </v-container>
 </template>
 
@@ -46,6 +47,7 @@ import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
 import { mapGetters } from "vuex";
 import { auth } from "../configs/firebase";
+import logout from "../mixins/logout";
 
 export default {
   data() {
@@ -88,7 +90,7 @@ export default {
       this.isLoading = false;
     }
   },
-  mixins: [validationMixin]
+  mixins: [validationMixin, logout]
 };
 </script>
 
