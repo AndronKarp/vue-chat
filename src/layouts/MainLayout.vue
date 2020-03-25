@@ -18,7 +18,7 @@
             <v-list-item-title>Sign Up</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="!currentUser" link>
+        <v-list-item v-if="!currentUser" link to="/auth">
           <v-list-item-action>
             <v-icon>mdi-login</v-icon>
           </v-list-item-action>

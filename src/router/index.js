@@ -14,6 +14,14 @@ const routes = [
     name: "Registration",
     component: () =>
       import(/* webpackChunkName: "registration" */ "../pages/PageRegistration")
+  },
+  {
+    path: "/auth",
+    name: "Authorization",
+    component: () =>
+      import(
+        /* webpackChunkName: "authorization" */ "../pages/PageAuthorization"
+      )
   }
 ];
 
