@@ -15,5 +15,6 @@ firebase.initializeApp(config);
 
 const database = firebase.database();
 const messagesRef = database.ref("messages");
+const auth = firebase.auth;
 
-export { messagesRef };
+export { messagesRef, auth };

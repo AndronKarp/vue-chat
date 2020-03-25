@@ -6,7 +6,7 @@
 
 <script>
 import MainLayout from "./layouts/MainLayout";
-import { messagesRef } from "./configs/firebase";
+import { messagesRef, auth } from "./configs/firebase";
 import { mapGetters, mapActions } from "vuex";
 
 export default {
@@ -16,11 +16,15 @@ export default {
   },
   methods: {
     ...mapActions([
+      "authorize",
       "addMessage",
       "removeMessage",
       "updateAreMessagesLoadedStatus"
     ]),
     setFirebaseEvents() {
+      auth().onAuthStateChanged(user => {
+        this.authorize(user);
+      });
       messagesRef.once("value", () => {
         messagesRef.on("child_added", snapshot => {
           this.addMessage({
