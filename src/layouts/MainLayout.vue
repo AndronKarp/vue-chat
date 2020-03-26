@@ -47,7 +47,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import logout from "../mixins/logout";
+import { auth } from "../configs/firebase";
 
 export default {
   props: {
@@ -59,6 +59,10 @@ export default {
   computed: {
     ...mapGetters(["currentUser"])
   },
-  mixins: [logout]
+  methods: {
+    logOut() {
+      auth().signOut();
+    }
+  }
 };
 </script>
