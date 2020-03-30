@@ -91,8 +91,8 @@ export default {
       email: {
         required: validators.required,
         email: validators.email,
-        emailIsTaken(value) {
-          return this.isEmailTaken(value);
+        emailIsNotTaken(value) {
+          return !this.isEmailTaken(value);
         }
       },
       password: {
@@ -123,7 +123,7 @@ export default {
         return "Required field";
       } else if (!this.$v.form.email.email) {
         return "Invalid e-mail";
-      } else if (this.$v.form.email.emailIsTaken) {
+      } else if (!this.$v.form.email.emailIsNotTaken) {
         return "E-mail is already taken";
       }
       return null;
