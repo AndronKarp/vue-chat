@@ -66,7 +66,7 @@
 <script>
 import { validationMixin } from "vuelidate";
 import * as validators from "vuelidate/lib/validators";
-import { auth } from "../configs/firebase";
+import { auth, userEmailsRef } from "../configs/firebase";
 import { mapGetters } from "vuex";
 
 export default {
@@ -90,7 +90,10 @@ export default {
       },
       email: {
         required: validators.required,
-        email: validators.email
+        email: validators.email,
+        emailIsTaken(value) {
+          return this.isEmailTaken(value);
+        }
       },
       password: {
         required: validators.required,
@@ -104,7 +107,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["currentUser"]),
+    ...mapGetters(["currentUser", "isEmailTaken"]),
     nameErrors() {
       if (this.$v.form.name.$dirty && !this.$v.form.name.required) {
         return "Required field";
@@ -120,6 +123,8 @@ export default {
         return "Required field";
       } else if (!this.$v.form.email.email) {
         return "Invalid e-mail";
+      } else if (this.$v.form.email.emailIsTaken) {
+        return "E-mail is already taken";
       }
       return null;
     },
@@ -156,9 +161,11 @@ export default {
         this.form.email,
         this.form.password
       );
-      await auth().currentUser.updateProfile({ displayName: this.form.name });
+      const currentUser = auth().currentUser;
+      await currentUser.updateProfile({ displayName: this.form.name });
       this.$router.push("/");
       this.isLoading = false;
+      userEmailsRef.child(currentUser.uid).set({ email: currentUser.email });
     }
   },
   mixins: [validationMixin]
