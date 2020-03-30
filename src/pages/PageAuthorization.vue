@@ -14,8 +14,8 @@
         type="email"
         dense
         outlined
-        :error-messages="isEmailEmpty"
         style="width: 100%"
+        :error="authError"
       ></v-text-field>
       <v-text-field
         v-model="$v.form.password.$model"
@@ -23,8 +23,8 @@
         type="password"
         dense
         outlined
-        :error-messages="isPasswordEmpty"
         style="width: 100%"
+        :error-messages="authErrorMessage"
       ></v-text-field>
       <v-btn
         @click="signIn"
@@ -54,7 +54,8 @@ export default {
       form: {
         email: null,
         password: null
-      }
+      },
+      authError: false
     };
   },
   validations: {
@@ -65,27 +66,22 @@ export default {
   },
   computed: {
     ...mapGetters(["currentUser"]),
-    isEmailEmpty() {
-      return this.$v.form.email.$dirty && !this.$v.form.email.required
-        ? "Required field"
-        : null;
-    },
-    isPasswordEmpty() {
-      return this.$v.form.password.$dirty && !this.$v.form.password.required
-        ? "Required field"
-        : null;
+    authErrorMessage() {
+      return this.authError ? "Invalid e-mail or password" : null;
     }
   },
   methods: {
-    async signIn() {
+    signIn() {
       this.$v.form.$touch();
+      this.authError = false;
       this.isLoading = true;
-      await auth().signInWithEmailAndPassword(
-        this.form.email,
-        this.form.password
-      );
-      this.$router.push("/");
-      this.isLoading = false;
+      auth()
+        .signInWithEmailAndPassword(this.form.email, this.form.password)
+        .then(() => this.$router.push("/"))
+        .catch(() => {
+          this.authError = true;
+        })
+        .finally(() => (this.isLoading = false));
     }
   },
   mixins: [validationMixin]
