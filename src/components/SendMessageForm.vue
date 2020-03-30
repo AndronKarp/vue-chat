@@ -48,7 +48,8 @@ export default {
       this.$v.form.$touch();
       messagesRef.push({
         name: this.currentUser.displayName,
-        text: this.form.text
+        text: this.form.text,
+        sender: this.currentUser.email
       });
       this.form.text = null;
     }
