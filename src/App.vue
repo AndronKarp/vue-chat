@@ -6,7 +6,7 @@
 
 <script>
 import MainLayout from "./layouts/MainLayout";
-import { messagesRef, auth } from "./configs/firebase";
+import { messagesRef, userEmailsRef, auth } from "./configs/firebase";
 import { mapGetters } from "vuex";
 
 export default {
@@ -40,6 +40,9 @@ export default {
           message => message.id === snapshot.key
         );
         updatedMessage.text = snapshot.val().text;
+      });
+      userEmailsRef.on("child_added", snapshot => {
+        this.$store.dispatch("addUserEmail", snapshot.val());
       });
     }
   },
