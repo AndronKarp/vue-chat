@@ -165,7 +165,7 @@ export default {
       await currentUser.updateProfile({ displayName: this.form.name });
       this.$router.push("/");
       this.isLoading = false;
-      userEmailsRef.child(currentUser.uid).set({ email: currentUser.email });
+      userEmailsRef.child(currentUser.uid).set({ value: currentUser.email });
     }
   },
   mixins: [validationMixin]

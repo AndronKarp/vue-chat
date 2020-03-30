@@ -4,7 +4,8 @@ export default {
   },
   getters: {
     isEmailTaken(state) {
-      return email => !!state.userEmails.find(user => user.email === email);
+      return email =>
+        !!state.userEmails.find(userEmail => userEmail.value === email);
     }
   },
   mutations: {
