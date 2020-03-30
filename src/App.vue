@@ -7,7 +7,7 @@
 <script>
 import MainLayout from "./layouts/MainLayout";
 import { messagesRef, auth } from "./configs/firebase";
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 
 export default {
   name: "App",
@@ -15,31 +15,25 @@ export default {
     ...mapGetters(["messages"])
   },
   methods: {
-    ...mapActions([
-      "authorize",
-      "addMessage",
-      "removeMessage",
-      "updateAreMessagesLoadedStatus"
-    ]),
     setFirebaseEvents() {
       auth().onAuthStateChanged(user => {
-        this.authorize(user);
+        this.$store.dispatch("authorize", user);
       });
       messagesRef.once("value", () => {
         messagesRef.on("child_added", snapshot => {
-          this.addMessage({
+          this.$store.dispatch("addMessage", {
             ...snapshot.val(),
             id: snapshot.key
           });
         });
-        this.updateAreMessagesLoadedStatus(true);
+        this.$store.dispatch("updateAreMessagesLoadedStatus", true);
       });
       messagesRef.on("child_removed", snapshot => {
         const deletedMessage = this.messages.find(
           message => message.id === snapshot.key
         );
         const index = this.messages.indexOf(deletedMessage);
-        this.removeMessage(index);
+        this.$store.dispatch("removeMessage", index);
       });
       messagesRef.on("child_changed", snapshot => {
         const updatedMessage = this.messages.find(
