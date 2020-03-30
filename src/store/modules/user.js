@@ -8,13 +8,13 @@ export default {
     }
   },
   mutations: {
-    updateUser(state, user) {
+    updateCurrentUser(state, user) {
       state.currentUser = user;
     }
   },
   actions: {
     authorize(store, user) {
-      store.commit("updateUser", user);
+      store.commit("updateCurrentUser", user);
     }
   }
 };
