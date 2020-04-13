@@ -109,48 +109,40 @@ export default {
   computed: {
     ...mapGetters(["currentUser", "isEmailTaken"]),
     nameErrors() {
-      if (this.$v.form.name.$dirty && !this.$v.form.name.required) {
-        return "Required field";
-      } else if (!this.$v.form.name.minLength) {
-        return "Name must have at least 2 characters";
-      } else if (!this.$v.form.name.alpha) {
-        return "Name must contain only letters";
-      }
-      return null;
+      const errors = [];
+      if (!this.$v.form.name.$dirty) return errors;
+      !this.$v.form.name.required && errors.push("Required field");
+      !this.$v.form.name.minLength &&
+        errors.push("Name must have at least 2 characters");
+      !this.$v.form.name.alpha && errors.push("Name must contain letters only");
+      return errors;
     },
     emailErrors() {
-      if (this.$v.form.email.$dirty && !this.$v.form.email.required) {
-        return "Required field";
-      } else if (!this.$v.form.email.email) {
-        return "Invalid e-mail";
-      } else if (!this.$v.form.email.emailIsNotTaken) {
-        return "E-mail is already taken";
-      }
-      return null;
+      const errors = [];
+      if (!this.$v.form.email.$dirty) return errors;
+      !this.$v.form.email.required && errors.push("Required field");
+      !this.$v.form.email.email && errors.push("Invalid e-mail");
+      !this.$v.form.email.emailIsNotTaken &&
+        errors.push("E-mail is already taken");
+      return errors;
     },
     passwordErrors() {
-      if (this.$v.form.password.$dirty && !this.$v.form.password.required) {
-        return "Required field";
-      } else if (!this.$v.form.password.minLength) {
-        return "Password must have at least 6 characters";
-      } else if (!this.$v.form.password.alphaNum) {
-        return "Password must contain letters and numbers only";
-      }
-      return null;
+      const errors = [];
+      if (!this.$v.form.password.$dirty) return errors;
+      !this.$v.form.password.required && errors.push("Required field");
+      !this.$v.form.password.minLength &&
+        errors.push("Password must have at least 6 characters");
+      !this.$v.form.password.alphaNum &&
+        errors.push("Password must contain letters and/or numbers only");
+      return errors;
     },
     confirmPasswordErrors() {
-      if (
-        this.$v.form.confirmPassword.$dirty &&
-        !this.$v.form.confirmPassword.required
-      ) {
-        return "Required field";
-      } else if (
-        !this.$v.form.confirmPassword.sameAsPassword &&
-        this.$v.form.confirmPassword.$dirty
-      ) {
-        return "Passwords don't match";
-      }
-      return null;
+      const errors = [];
+      if (!this.$v.form.confirmPassword.$dirty) return errors;
+      !this.$v.form.confirmPassword.required && errors.push("Required field");
+      !this.$v.form.confirmPassword.sameAsPassword &&
+        errors.push("Passwords don't match");
+      return errors;
     }
   },
   methods: {
