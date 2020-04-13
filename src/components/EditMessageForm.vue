@@ -1,14 +1,17 @@
 <template>
-  <v-list-item-content>
-    <v-list-item-title>
-      <v-text-field
-        outlined
-        dense
-        clearable
-        v-model="$v.editingMessage.text.$model"
-      ></v-text-field>
-    </v-list-item-title>
-    <v-list-item-subtitle class="d-flex justify-center">
+  <v-form
+    @submit.prevent
+    class="d-flex flex-column align-center py-2"
+    style="width: 100%"
+  >
+    <v-text-field
+      outlined
+      dense
+      clearable
+      v-model="$v.editingMessage.text.$model"
+      style="width: 100%"
+    ></v-text-field>
+    <div class="buttons d-flex">
       <v-btn
         @click="updateMessage(message)"
         :dark="!$v.editingMessage.text.$invalid"
@@ -19,8 +22,8 @@
       <v-btn class="ml-4" @click="cancelEditing" dark color="amber darken-4"
         >Cancel</v-btn
       >
-    </v-list-item-subtitle>
-  </v-list-item-content>
+    </div>
+  </v-form>
 </template>
 
 <script>

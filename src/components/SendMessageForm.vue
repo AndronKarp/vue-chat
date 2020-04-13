@@ -1,5 +1,6 @@
 <template>
-  <div
+  <v-form
+    @submit.prevent
     class="d-flex flex-column align-center"
     style="width: 60%; min-width: 280px;"
   >
@@ -18,7 +19,7 @@
       :disabled="$v.form.$invalid"
       >Send</v-btn
     >
-  </div>
+  </v-form>
 </template>
 
 <script>
