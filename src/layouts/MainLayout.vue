@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     logOut() {
-      auth().signOut();
+      auth.signOut();
       this.$router.push("/auth");
     }
   }

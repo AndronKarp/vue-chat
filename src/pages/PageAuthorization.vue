@@ -75,7 +75,7 @@ export default {
       this.$v.form.$touch();
       this.authError = false;
       this.isLoading = true;
-      auth()
+      auth
         .signInWithEmailAndPassword(this.form.email, this.form.password)
         .then(() => this.$router.push("/"))
         .catch(() => {

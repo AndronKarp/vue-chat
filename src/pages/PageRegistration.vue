@@ -149,11 +149,11 @@ export default {
     async register() {
       this.$v.form.$touch();
       this.isLoading = true;
-      await auth().createUserWithEmailAndPassword(
+      await auth.createUserWithEmailAndPassword(
         this.form.email,
         this.form.password
       );
-      const currentUser = auth().currentUser;
+      const currentUser = auth.currentUser;
       await currentUser.updateProfile({ displayName: this.form.name });
       this.$router.push("/");
       this.isLoading = false;

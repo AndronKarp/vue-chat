@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     setFirebaseEvents() {
-      auth().onAuthStateChanged(user => {
+      auth.onAuthStateChanged(user => {
         this.$store.dispatch("authorize", user);
       });
       messagesRef.once("value", () => {
