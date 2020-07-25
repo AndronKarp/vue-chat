@@ -15,22 +15,34 @@ export default {
     addToMessages(state, message) {
       state.messages.push(message);
     },
-    saveAreMessagesLoadedNewStatus(state, status) {
+    saveAreMessagesLoadedNewStatus(state, { status }) {
       state.areMessagesLoaded = status;
     },
-    removeFromMessages(state, index) {
-      state.messages.splice(index, 1);
+    removeFromMessages(state, messageIndex) {
+      state.messages.splice(messageIndex, 1);
+    },
+    updateMessageText(state, { message, text }) {
+      message.text = text;
     }
   },
   actions: {
     addMessage(store, message) {
       store.commit("addToMessages", message);
     },
-    updateAreMessagesLoadedStatus(store, status) {
-      store.commit("saveAreMessagesLoadedNewStatus", status);
+    setAreMessagesLoadedStatusToTrue(store) {
+      store.commit("saveAreMessagesLoadedNewStatus", { status: true });
     },
-    removeMessage(store, index) {
-      store.commit("removeFromMessages", index);
+    removeMessage(context, messageId) {
+      const messageIndex = context.state.messages.findIndex(
+        message => message.id === messageId
+      );
+      context.commit("removeFromMessages", messageIndex);
+    },
+    editMessage(context, { messageId, text }) {
+      const message = context.state.messages.find(
+        message => message.id === messageId
+      );
+      context.commit("updateMessageText", { message, text });
     }
   }
 };

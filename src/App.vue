@@ -26,20 +26,15 @@ export default {
             id: snapshot.key
           });
         });
-        this.$store.dispatch("updateAreMessagesLoadedStatus", true);
+        this.$store.dispatch("setAreMessagesLoadedStatusToTrue");
       });
       messagesRef.on("child_removed", snapshot => {
-        const deletedMessage = this.messages.find(
-          message => message.id === snapshot.key
-        );
-        const index = this.messages.indexOf(deletedMessage);
-        this.$store.dispatch("removeMessage", index);
+        const messageId = snapshot.key;
+        this.$store.dispatch("removeMessage", messageId);
       });
       messagesRef.on("child_changed", snapshot => {
-        const updatedMessage = this.messages.find(
-          message => message.id === snapshot.key
-        );
-        updatedMessage.text = snapshot.val().text;
+        const { text } = snapshot.val();
+        this.$store.dispatch("editMessage", { messageId: snapshot.key, text });
       });
       userEmailsRef.on("child_added", snapshot => {
         this.$store.dispatch("addUserEmail", snapshot.val());
