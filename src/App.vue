@@ -1,18 +1,39 @@
 <template>
-  <div id="app">
-    <main-layout></main-layout>
-  </div>
+  <v-app id="app">
+    <template v-if="areMessagesLoaded">
+      <TheNav v-model="isNavVisible" />
+      <TheHeader @navButtonClick="showNav" />
+      <v-content>
+        <router-view></router-view>
+      </v-content>
+      <TheFooter />
+    </template>
+    <v-progress-circular
+      v-else
+      indeterminate
+      color="amber darken-4"
+    ></v-progress-circular>
+  </v-app>
 </template>
 
 <script>
-import MainLayout from "./layouts/MainLayout";
+import TheNav from "./components/TheNav";
+import TheHeader from "./components/TheHeader";
+import TheFooter from "./components/TheFooter";
 import { messagesRef, userEmailsRef, auth } from "./configs/firebase";
 import { mapGetters } from "vuex";
 
 export default {
-  name: "App",
+  data() {
+    return {
+      isNavVisible: null
+    };
+  },
   computed: {
-    ...mapGetters(["messages"])
+    ...mapGetters(["areMessagesLoaded"])
+  },
+  created() {
+    this.setFirebaseEvents();
   },
   methods: {
     setFirebaseEvents() {
@@ -39,13 +60,15 @@ export default {
       userEmailsRef.on("child_added", snapshot => {
         this.$store.dispatch("addUserEmail", snapshot.val());
       });
+    },
+    showNav() {
+      this.isNavVisible = true;
     }
   },
-  created() {
-    this.setFirebaseEvents();
-  },
   components: {
-    MainLayout
+    TheNav,
+    TheHeader,
+    TheFooter
   }
 };
 </script>
