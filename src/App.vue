@@ -8,11 +8,12 @@
       </v-content>
       <TheFooter />
     </template>
-    <v-progress-circular
-      v-else
-      indeterminate
-      color="amber darken-4"
-    ></v-progress-circular>
+    <div v-else class="d-flex justify-center align-center" style="height: 100%">
+      <v-progress-circular
+        indeterminate
+        color="amber darken-4"
+      ></v-progress-circular>
+    </div>
   </v-app>
 </template>
 
