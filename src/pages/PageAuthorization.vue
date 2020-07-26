@@ -5,6 +5,7 @@
   >
     <v-form
       v-if="!currentUser"
+      @submit.prevent="signIn"
       class="d-flex flex-column align-center"
       style="width: 25%; min-width: 280px"
     >
@@ -27,7 +28,7 @@
         :error-messages="authErrorMessage"
       ></v-text-field>
       <v-btn
-        @click="signIn"
+        type="submit"
         color="amber darken-4"
         :dark="!$v.form.$invalid"
         :disabled="$v.form.$invalid"
@@ -72,7 +73,6 @@ export default {
   },
   methods: {
     signIn() {
-      this.$v.form.$touch();
       this.authError = false;
       this.isLoading = true;
       auth

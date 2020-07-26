@@ -5,6 +5,7 @@
   >
     <v-form
       v-if="!currentUser"
+      @submit.prevent="register"
       class="d-flex flex-column align-center"
       style="width: 25%; min-width: 280px"
     >
@@ -49,7 +50,7 @@
         :success="!$v.form.confirmPassword.$invalid"
       ></v-text-field>
       <v-btn
-        @click="register"
+        type="submit"
         color="amber darken-4"
         :dark="!$v.form.$invalid"
         :disabled="$v.form.$invalid"
@@ -147,7 +148,6 @@ export default {
   },
   methods: {
     async register() {
-      this.$v.form.$touch();
       this.isLoading = true;
       await auth.createUserWithEmailAndPassword(
         this.form.email,

@@ -1,6 +1,6 @@
 <template>
   <v-form
-    @submit.prevent
+    @submit.prevent="updateMessage(message)"
     class="d-flex flex-column align-center py-2"
     style="width: 100%"
   >
@@ -13,7 +13,7 @@
     ></v-text-field>
     <div class="buttons d-flex">
       <v-btn
-        @click="updateMessage(message)"
+        type="submit"
         :dark="!$v.editingMessage.text.$invalid"
         :disabled="$v.editingMessage.text.$invalid"
         color="amber darken-4"

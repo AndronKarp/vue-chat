@@ -1,6 +1,6 @@
 <template>
   <v-form
-    @submit.prevent
+    @submit.prevent="sendMessage"
     class="d-flex flex-column align-center"
     style="width: 60%; min-width: 280px;"
   >
@@ -13,7 +13,7 @@
       style="width: 100%"
     ></v-text-field>
     <v-btn
-      @click="sendMessage"
+      type="submit"
       color="amber darken-4"
       :dark="!$v.form.$invalid"
       :disabled="$v.form.$invalid"
@@ -46,7 +46,6 @@ export default {
   },
   methods: {
     sendMessage() {
-      this.$v.form.$touch();
       messagesRef.push({
         name: this.currentUser.displayName,
         text: this.form.text,
