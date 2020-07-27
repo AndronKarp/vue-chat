@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app color="amber darken-4" dark>
-    <v-app-bar-nav-icon @click="showNav" />
+    <v-app-bar-nav-icon @click="toggleNav" />
     <v-toolbar-title>Vue Chat</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-btn v-if="currentUser" @click="signOut" icon>
@@ -18,7 +18,7 @@ export default {
     ...mapGetters(["currentUser"])
   },
   methods: {
-    showNav() {
+    toggleNav() {
       this.$emit("navButtonClick");
     },
     signOut() {
