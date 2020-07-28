@@ -1,10 +1,9 @@
 <template>
   <v-container
     class="d-flex flex-column justify-center align-center"
-    style="width: 100%; height: 100%"
+    style="height: 100%"
   >
     <v-form
-      v-if="!currentUser"
       @submit.prevent="register"
       class="d-flex flex-column align-center"
       style="width: 25%; min-width: 280px"
@@ -54,13 +53,10 @@
         color="amber darken-4"
         :dark="!$v.form.$invalid"
         :disabled="$v.form.$invalid"
-        :loading="isLoading"
+        :loading="isFormSubmitting"
         >Sign Up</v-btn
       >
     </v-form>
-    <v-container v-else class="d-flex flex-column justify-center align-center">
-      <p>Signed in as {{ currentUser.email }}</p>
-    </v-container>
   </v-container>
 </template>
 
@@ -73,13 +69,13 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
-      isLoading: false,
       form: {
         name: null,
         email: null,
         password: null,
         confirmPassword: null
-      }
+      },
+      isFormSubmitting: false
     };
   },
   validations: {
@@ -148,7 +144,7 @@ export default {
   },
   methods: {
     async register() {
-      this.isLoading = true;
+      this.isFormSubmitting = true;
       await auth.createUserWithEmailAndPassword(
         this.form.email,
         this.form.password
@@ -156,7 +152,7 @@ export default {
       const currentUser = auth.currentUser;
       await currentUser.updateProfile({ displayName: this.form.name });
       this.$router.push("/");
-      this.isLoading = false;
+      this.isFormSubmitting = false;
       userEmailsRef.child(currentUser.uid).set({ value: currentUser.email });
     }
   },

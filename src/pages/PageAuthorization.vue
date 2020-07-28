@@ -1,10 +1,9 @@
 <template>
   <v-container
     class="d-flex flex-column justify-center align-center"
-    style="width: 100%; height: 100%"
+    style="height: 100%"
   >
     <v-form
-      v-if="!currentUser"
       @submit.prevent="signIn"
       class="d-flex flex-column align-center"
       style="width: 25%; min-width: 280px"
@@ -32,13 +31,10 @@
         color="amber darken-4"
         :dark="!$v.form.$invalid"
         :disabled="$v.form.$invalid"
-        :loading="isLoading"
+        :loading="isFormSubmitting"
         >Sign In</v-btn
       >
     </v-form>
-    <v-container v-else class="d-flex flex-column justify-center align-center">
-      <p>Signed in as {{ currentUser.email }}</p>
-    </v-container>
   </v-container>
 </template>
 
@@ -51,12 +47,12 @@ import { auth } from "../configs/firebase";
 export default {
   data() {
     return {
-      isLoading: false,
       form: {
         email: null,
         password: null
       },
-      authError: false
+      authError: false,
+      isFormSubmitting: false
     };
   },
   validations: {
@@ -74,14 +70,14 @@ export default {
   methods: {
     signIn() {
       this.authError = false;
-      this.isLoading = true;
+      this.isFormSubmitting = true;
       auth
         .signInWithEmailAndPassword(this.form.email, this.form.password)
         .then(() => this.$router.push("/"))
         .catch(() => {
           this.authError = true;
         })
-        .finally(() => (this.isLoading = false));
+        .finally(() => (this.isFormSubmitting = false));
     }
   },
   mixins: [validationMixin]

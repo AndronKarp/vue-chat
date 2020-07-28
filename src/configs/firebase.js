@@ -17,5 +17,13 @@ const database = firebase.database();
 const messagesRef = database.ref("messages");
 const userEmailsRef = database.ref("userEmails");
 const auth = firebase.auth();
+auth.getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+      unsubscribe();
+      resolve(user);
+    }, reject);
+  });
+};
 
 export { messagesRef, userEmailsRef, auth };

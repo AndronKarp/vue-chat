@@ -21,8 +21,8 @@ export default {
     toggleNav() {
       this.$emit("navButtonClick");
     },
-    signOut() {
-      auth.signOut();
+    async signOut() {
+      await auth.signOut();
       this.$router.push("/auth");
     }
   }
