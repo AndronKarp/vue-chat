@@ -44,7 +44,7 @@ export default {
     ...mapGetters(["currentUser"]),
     isCurrentUserSender() {
       return this.currentUser
-        ? this.currentUser.email === this.message.sender
+        ? this.currentUser.uid === this.message.senderId
         : false;
     }
   },

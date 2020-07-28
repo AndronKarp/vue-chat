@@ -49,7 +49,7 @@ export default {
       messagesRef.push({
         name: this.currentUser.displayName,
         text: this.form.text,
-        sender: this.currentUser.email
+        senderId: this.currentUser.uid
       });
       this.form.text = null;
     }
