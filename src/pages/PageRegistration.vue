@@ -9,44 +9,16 @@
       style="width: 25%; min-width: 280px"
     >
       <v-text-field
-        v-model="$v.form.name.$model"
-        placeholder="Your name..."
-        type="text"
+        v-for="(field, index) in Object.keys(form)"
+        :key="index"
+        v-model="$v.form[field].value.$model"
+        :placeholder="form[field].placeholder"
+        :type="form[field].type"
+        :error-messages="validationErrorMessages(field)"
+        :success="!$v.form[field].$invalid"
         dense
         outlined
         style="width: 100%"
-        :error-messages="nameErrors"
-        :success="!$v.form.name.$invalid"
-      ></v-text-field>
-      <v-text-field
-        v-model="$v.form.email.$model"
-        placeholder="Your e-mail..."
-        type="email"
-        dense
-        outlined
-        style="width: 100%"
-        :error-messages="emailErrors"
-        :success="!$v.form.email.$invalid"
-      ></v-text-field>
-      <v-text-field
-        v-model="$v.form.password.$model"
-        placeholder="Your password..."
-        type="password"
-        dense
-        outlined
-        style="width: 100%"
-        :error-messages="passwordErrors"
-        :success="!$v.form.password.$invalid"
-      ></v-text-field>
-      <v-text-field
-        v-model="$v.form.confirmPassword.$model"
-        placeholder="Confirm password..."
-        type="password"
-        dense
-        outlined
-        style="width: 100%"
-        :error-messages="confirmPasswordErrors"
-        :success="!$v.form.confirmPassword.$invalid"
       ></v-text-field>
       <v-btn
         type="submit"
@@ -70,77 +42,112 @@ export default {
   data() {
     return {
       form: {
-        name: null,
-        email: null,
-        password: null,
-        confirmPassword: null
+        name: {
+          type: "text",
+          placeholder: "Your name...",
+          validations: {
+            required: {
+              rule: validators.required,
+              errorMessage: "Required field"
+            },
+            alpha: {
+              rule: validators.alpha,
+              errorMessage: "Name must contain only letters"
+            },
+            minLength: {
+              rule: validators.minLength(2),
+              errorMessage: "Name must have at least 2 characters"
+            }
+          },
+          value: null
+        },
+        email: {
+          type: "email",
+          placeholder: "Your e-mail...",
+          validations: {
+            required: {
+              rule: validators.required,
+              errorMessage: "Required field"
+            },
+            email: {
+              rule: validators.email,
+              errorMessage: "Invalid e-mail"
+            },
+            unique: {
+              rule(email) {
+                return !this.isEmailTaken(email);
+              },
+              errorMessage: "E-mail is already taken"
+            }
+          },
+          value: null
+        },
+        password: {
+          type: "password",
+          placeholder: "Your password...",
+          validations: {
+            required: {
+              rule: validators.required,
+              errorMessage: "Required field"
+            },
+            alphaNum: {
+              rule: validators.alphaNum,
+              errorMessage: "Password must contain only letters and/or numbers"
+            },
+            minLength: {
+              rule: validators.minLength(6),
+              errorMessage: "Password must contain at least 6 characters"
+            }
+          },
+          value: null
+        },
+        confirmPassword: {
+          type: "password",
+          placeholder: "Confirm password...",
+          validations: {
+            required: {
+              rule: validators.required,
+              errorMessage: "Required field"
+            },
+            sameAsPassword: {
+              rule: validators.sameAs(function() {
+                return this.form.password.value;
+              }),
+              errorMessage: "Passwords don't match"
+            }
+          },
+          value: null
+        }
       },
       isFormSubmitting: false
     };
   },
-  validations: {
-    form: {
-      name: {
-        required: validators.required,
-        alpha: validators.alpha,
-        minLength: validators.minLength(2)
-      },
-      email: {
-        required: validators.required,
-        email: validators.email,
-        emailIsNotTaken(value) {
-          return !this.isEmailTaken(value);
-        }
-      },
-      password: {
-        required: validators.required,
-        alphaNum: validators.alphaNum,
-        minLength: validators.minLength(6)
-      },
-      confirmPassword: {
-        required: validators.required,
-        sameAsPassword: validators.sameAs("password")
-      }
-    }
+  validations() {
+    const form = {};
+    const formFields = Object.entries(this.form);
+    formFields.forEach(([fieldName, field]) => {
+      const value = {};
+      const validations = Object.entries(field.validations);
+      validations.forEach(([validationName, validation]) => {
+        value[validationName] = validation.rule;
+      });
+      form[fieldName] = { value };
+    });
+    return { form };
   },
   computed: {
     ...mapGetters(["currentUser", "isEmailTaken"]),
-    nameErrors() {
-      const errors = [];
-      if (!this.$v.form.name.$dirty) return errors;
-      !this.$v.form.name.required && errors.push("Required field");
-      !this.$v.form.name.minLength &&
-        errors.push("Name must have at least 2 characters");
-      !this.$v.form.name.alpha && errors.push("Name must contain letters only");
-      return errors;
-    },
-    emailErrors() {
-      const errors = [];
-      if (!this.$v.form.email.$dirty) return errors;
-      !this.$v.form.email.required && errors.push("Required field");
-      !this.$v.form.email.email && errors.push("Invalid e-mail");
-      !this.$v.form.email.emailIsNotTaken &&
-        errors.push("E-mail is already taken");
-      return errors;
-    },
-    passwordErrors() {
-      const errors = [];
-      if (!this.$v.form.password.$dirty) return errors;
-      !this.$v.form.password.required && errors.push("Required field");
-      !this.$v.form.password.minLength &&
-        errors.push("Password must have at least 6 characters");
-      !this.$v.form.password.alphaNum &&
-        errors.push("Password must contain letters and/or numbers only");
-      return errors;
-    },
-    confirmPasswordErrors() {
-      const errors = [];
-      if (!this.$v.form.confirmPassword.$dirty) return errors;
-      !this.$v.form.confirmPassword.required && errors.push("Required field");
-      !this.$v.form.confirmPassword.sameAsPassword &&
-        errors.push("Passwords don't match");
-      return errors;
-    }
+    validationErrorMessages: () =>
+      function(field) {
+        const errorMessages = [];
+        if (!this.$v.form[field].value.$dirty) return errorMessages;
+        const validations = Object.entries(this.form[field].validations);
+        validations.forEach(([name, validation]) => {
+          !this.$v.form[field].value[name] &&
+            errorMessages.push(validation.errorMessage);
+        });
+        return errorMessages;
+      }
   },
   methods: {
     async register() {
