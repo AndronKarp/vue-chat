@@ -1,6 +1,6 @@
 <template>
   <v-form
-    @submit.prevent="updateMessage(message)"
+    @submit.prevent="editMessage(message)"
     class="d-flex flex-column align-center py-2"
     style="width: 100%"
   >
@@ -52,11 +52,11 @@ export default {
     cancelEditing() {
       this.$emit("onCancelEditing");
     },
-    updateMessage(message) {
-      messagesRef
+    async editMessage(message) {
+      await messagesRef
         .child(message.id)
-        .update({ text: this.editingMessage.text })
-        .then(() => this.cancelEditing());
+        .update({ text: this.editingMessage.text });
+      this.cancelEditing();
     }
   },
   mixins: [validationMixin]
