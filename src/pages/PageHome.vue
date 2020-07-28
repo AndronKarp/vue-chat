@@ -1,9 +1,11 @@
 <template>
-  <v-container class="d-flex flex-column align-center" style="height: 100%">
+  <v-container
+    class="d-flex flex-column align-center"
+    :class="{ 'justify-center': !messages.length }"
+    style="height: 100%"
+  >
     <MessageList v-if="messages.length" />
-    <v-container class="d-flex justify-center" v-else
-      >No messages yet!</v-container
-    >
+    <span class="mb-2" v-else>No messages yet!</span>
     <SendMessageForm />
   </v-container>
 </template>
