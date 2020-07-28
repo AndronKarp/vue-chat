@@ -1,7 +1,12 @@
 <template>
   <v-hover v-slot:default="{ hover }">
     <v-list-item>
-      <template v-if="!isEditing">
+      <EditMessageForm
+        v-if="isMessageEditing"
+        :message="message"
+        @onCancelEditing="cancelEditing"
+      />
+      <template v-else>
         <v-list-item-content>
           <v-list-item-title>{{ message.text }}</v-list-item-title>
           <v-list-item-subtitle>{{ message.name }}</v-list-item-subtitle>
@@ -10,15 +15,10 @@
           :hidden="!hover || !isCurrentUserSender"
           class="flex-row align-center"
         >
-          <v-icon class="mr-2" dense @click="editMessage">mdi-pencil</v-icon>
+          <v-icon class="mr-2" dense @click="startEditing">mdi-pencil</v-icon>
           <v-icon dense @click="deleteMessage(message)">mdi-delete</v-icon>
         </v-list-item-action>
       </template>
-      <EditMessageForm
-        v-else
-        :message="message"
-        @onCancelEditing="cancelEditing"
-      />
     </v-list-item>
   </v-hover>
 </template>
@@ -37,26 +37,24 @@ export default {
   },
   data() {
     return {
-      isEditing: false
+      isMessageEditing: false
     };
   },
   computed: {
     ...mapGetters(["currentUser"]),
     isCurrentUserSender() {
-      return this.currentUser
-        ? this.currentUser.uid === this.message.senderId
-        : false;
+      return this.currentUser.uid === this.message.senderId;
     }
   },
   methods: {
     deleteMessage(message) {
       messagesRef.child(message.id).remove();
     },
-    editMessage() {
-      this.isEditing = true;
+    startEditing() {
+      this.isMessageEditing = true;
     },
     cancelEditing() {
-      this.isEditing = false;
+      this.isMessageEditing = false;
     }
   },
   components: {
