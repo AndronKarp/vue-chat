@@ -1,30 +1,33 @@
 <template>
-  <v-form
-    @submit.prevent="register"
-    class="d-flex flex-column align-center align-self-center"
-    style="width: 25%; min-width: 280px"
-  >
-    <v-text-field
-      v-for="(field, index) in Object.keys(form)"
-      :key="index"
-      v-model="$v.form[field].value.$model"
-      :placeholder="form[field].placeholder"
-      :type="form[field].type"
-      :error-messages="validationErrorMessages(field)"
-      :success="!$v.form[field].$invalid"
-      dense
-      outlined
-      style="width: 100%"
-    ></v-text-field>
-    <v-btn
-      type="submit"
-      color="amber darken-4"
-      :dark="!$v.form.$invalid"
-      :disabled="$v.form.$invalid"
-      :loading="isFormSubmitting"
-      >Sign Up</v-btn
-    >
-  </v-form>
+  <v-card class="elevation-12">
+    <v-toolbar dark flat color="amber darken-4">
+      <v-toolbar-title>Create your account</v-toolbar-title>
+    </v-toolbar>
+    <v-card-text
+      ><v-form @submit.prevent="register">
+        <v-text-field
+          v-for="(field, index) in Object.keys(form)"
+          :key="index"
+          v-model="$v.form[field].value.$model"
+          :placeholder="form[field].placeholder"
+          :type="form[field].type"
+          :error-messages="validationErrorMessages(field)"
+          :success="!$v.form[field].$invalid"
+          dense
+          outlined
+          style="width: 100%"
+        ></v-text-field>
+        <v-btn
+          type="submit"
+          color="amber darken-4"
+          :dark="!$v.form.$invalid"
+          :disabled="$v.form.$invalid"
+          :loading="isFormSubmitting"
+          >Sign Up</v-btn
+        >
+      </v-form>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>

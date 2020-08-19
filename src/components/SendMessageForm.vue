@@ -1,9 +1,5 @@
 <template>
-  <v-form
-    @submit.prevent="sendMessage"
-    class="d-flex flex-column align-center"
-    style="width: 60%; min-width: 280px;"
-  >
+  <v-form @submit.prevent="sendMessage" class="d-flex flex-column align-center">
     <v-text-field
       v-model="$v.form.text.$model"
       type="text"

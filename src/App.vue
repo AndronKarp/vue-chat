@@ -1,37 +1,18 @@
 <template>
   <v-app id="app">
-    <template v-if="areMessagesLoaded">
-      <TheNav v-model="isNavVisible" />
-      <TheHeader @navButtonClick="toggleNav" />
-      <v-content>
-        <v-container class="d-flex justify-center" style="height: 100%">
-          <router-view></router-view>
-        </v-container>
-      </v-content>
-    </template>
-    <div v-else class="d-flex justify-center align-center" style="height: 100%">
-      <v-progress-circular
-        indeterminate
-        color="amber darken-4"
-      ></v-progress-circular>
-    </div>
+    <component :is="$route.meta.layout || 'div'">
+      <router-view></router-view>
+    </component>
   </v-app>
 </template>
 
 <script>
-import TheNav from "./components/TheNav";
-import TheHeader from "./components/TheHeader";
 import { messagesRef, userEmailsRef, auth } from "./configs/firebase";
 import { mapGetters } from "vuex";
 
 export default {
-  data() {
-    return {
-      isNavVisible: null
-    };
-  },
   computed: {
-    ...mapGetters(["areMessagesLoaded"])
+    ...mapGetters(["currentUser"])
   },
   created() {
     this.setFirebaseEvents();
@@ -61,14 +42,7 @@ export default {
       userEmailsRef.on("child_added", snapshot => {
         this.$store.dispatch("addUserEmail", snapshot.val());
       });
-    },
-    toggleNav() {
-      this.isNavVisible = !this.isNavVisible;
     }
-  },
-  components: {
-    TheNav,
-    TheHeader
   }
 };
 </script>
