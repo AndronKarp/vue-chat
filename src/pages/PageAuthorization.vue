@@ -1,41 +1,36 @@
 <template>
-  <v-container
-    class="d-flex flex-column justify-center align-center"
-    style="height: 100%"
+  <v-form
+    @submit.prevent="signIn"
+    class="d-flex flex-column align-center align-self-center"
+    style="width: 25%; min-width: 280px"
   >
-    <v-form
-      @submit.prevent="signIn"
-      class="d-flex flex-column align-center"
-      style="width: 25%; min-width: 280px"
+    <v-text-field
+      v-model="$v.form.email.$model"
+      placeholder="Your e-mail..."
+      type="email"
+      dense
+      outlined
+      style="width: 100%"
+      :error="authError"
+    ></v-text-field>
+    <v-text-field
+      v-model="$v.form.password.$model"
+      placeholder="Your password..."
+      type="password"
+      dense
+      outlined
+      style="width: 100%"
+      :error-messages="authErrorMessage"
+    ></v-text-field>
+    <v-btn
+      type="submit"
+      color="amber darken-4"
+      :dark="!$v.form.$invalid"
+      :disabled="$v.form.$invalid"
+      :loading="isFormSubmitting"
+      >Sign In</v-btn
     >
-      <v-text-field
-        v-model="$v.form.email.$model"
-        placeholder="Your e-mail..."
-        type="email"
-        dense
-        outlined
-        style="width: 100%"
-        :error="authError"
-      ></v-text-field>
-      <v-text-field
-        v-model="$v.form.password.$model"
-        placeholder="Your password..."
-        type="password"
-        dense
-        outlined
-        style="width: 100%"
-        :error-messages="authErrorMessage"
-      ></v-text-field>
-      <v-btn
-        type="submit"
-        color="amber darken-4"
-        :dark="!$v.form.$invalid"
-        :disabled="$v.form.$invalid"
-        :loading="isFormSubmitting"
-        >Sign In</v-btn
-      >
-    </v-form>
-  </v-container>
+  </v-form>
 </template>
 
 <script>

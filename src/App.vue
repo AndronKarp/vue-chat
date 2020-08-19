@@ -4,7 +4,9 @@
       <TheNav v-model="isNavVisible" />
       <TheHeader @navButtonClick="toggleNav" />
       <v-content>
-        <router-view></router-view>
+        <v-container class="d-flex justify-center" style="height: 100%">
+          <router-view></router-view>
+        </v-container>
       </v-content>
     </template>
     <div v-else class="d-flex justify-center align-center" style="height: 100%">
