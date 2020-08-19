@@ -6,7 +6,6 @@
       <v-content>
         <router-view></router-view>
       </v-content>
-      <TheFooter />
     </template>
     <div v-else class="d-flex justify-center align-center" style="height: 100%">
       <v-progress-circular
@@ -20,7 +19,6 @@
 <script>
 import TheNav from "./components/TheNav";
 import TheHeader from "./components/TheHeader";
-import TheFooter from "./components/TheFooter";
 import { messagesRef, userEmailsRef, auth } from "./configs/firebase";
 import { mapGetters } from "vuex";
 
@@ -68,8 +66,7 @@ export default {
   },
   components: {
     TheNav,
-    TheHeader,
-    TheFooter
+    TheHeader
   }
 };
 </script>
