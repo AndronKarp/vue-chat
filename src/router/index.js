@@ -10,7 +10,10 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    meta: { layout: MainLayout },
+    meta: {
+      requiresAuth: true,
+      layout: MainLayout
+    },
     component: () => import(/* webpackChunkName: "home" */ "../pages/PageHome")
   },
   {
@@ -43,13 +46,16 @@ const router = new VueRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
+  const routeRequiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const routeRequiresUnauthorizedUser = to.matched.some(
     record => record.meta.requiresUnauthorizedUser
   );
   const userIsAuthorized = await auth.getCurrentUser();
-  routeRequiresUnauthorizedUser && userIsAuthorized
-    ? next({ path: "/" })
-    : next();
+  if (userIsAuthorized) {
+    routeRequiresUnauthorizedUser ? next("/") : next();
+  } else {
+    routeRequiresAuth ? next("/auth") : next();
+  }
 });
 
 export default router;
