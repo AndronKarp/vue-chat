@@ -4,19 +4,22 @@
       <v-toolbar-title>Create your account</v-toolbar-title>
     </v-toolbar>
     <v-card-text
-      ><v-form @submit.prevent="register">
+      ><v-form @submit.prevent="register" class="text-center">
         <v-text-field
           v-for="(field, index) in Object.keys(form)"
           :key="index"
           v-model="$v.form[field].value.$model"
-          :placeholder="form[field].placeholder"
+          :label="form[field].label"
           :type="form[field].type"
           :error-messages="validationErrorMessages(field)"
           :success="!$v.form[field].$invalid"
-          dense
           outlined
-          style="width: 100%"
+          dense
         ></v-text-field>
+        <p>
+          Already have an account?
+          <router-link to="/auth">Sign in!</router-link>
+        </p>
         <v-btn
           type="submit"
           color="amber darken-4"
@@ -42,7 +45,7 @@ export default {
       form: {
         name: {
           type: "text",
-          placeholder: "Your name...",
+          label: "Name",
           validations: {
             required: {
               rule: validators.required,
@@ -61,7 +64,7 @@ export default {
         },
         email: {
           type: "email",
-          placeholder: "Your e-mail...",
+          label: "E-mail",
           validations: {
             required: {
               rule: validators.required,
@@ -82,7 +85,7 @@ export default {
         },
         password: {
           type: "password",
-          placeholder: "Your password...",
+          label: "Password",
           validations: {
             required: {
               rule: validators.required,
@@ -101,7 +104,7 @@ export default {
         },
         confirmPassword: {
           type: "password",
-          placeholder: "Confirm password...",
+          label: "Confirm password",
           validations: {
             required: {
               rule: validators.required,

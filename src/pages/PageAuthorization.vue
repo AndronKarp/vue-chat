@@ -7,22 +7,24 @@
       <v-form @submit.prevent="signIn" class="text-center">
         <v-text-field
           v-model="$v.form.email.$model"
-          placeholder="Your e-mail..."
+          label="E-mail"
           type="email"
-          dense
-          outlined
-          style="width: 100%"
           :error="authError"
+          outlined
+          dense
         ></v-text-field>
         <v-text-field
           v-model="$v.form.password.$model"
-          placeholder="Your password..."
+          label="Password"
           type="password"
-          dense
-          outlined
-          style="width: 100%"
           :error-messages="authErrorMessage"
+          outlined
+          dense
         ></v-text-field>
+        <p>
+          Don't have an account?
+          <router-link to="/reg">Create it now!</router-link>
+        </p>
         <v-btn
           type="submit"
           color="amber darken-4"
