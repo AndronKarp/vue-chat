@@ -2,11 +2,11 @@
   <div style="height: 100%">
     <TheNav v-model="isNavVisible" />
     <TheHeader @navButtonClick="toggleNav" />
-    <v-content>
+    <v-main>
       <v-container class="fill-height">
         <slot></slot>
       </v-container>
-    </v-content>
+    </v-main>
   </div>
 </template>
 
