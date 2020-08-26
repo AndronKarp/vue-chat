@@ -15,6 +15,7 @@
 
 <script>
 import { messagesRef } from "../configs/firebase";
+import isMessageEmpty from "../mixins/is-message-empty";
 
 export default {
   props: {
@@ -28,11 +29,6 @@ export default {
       text: this.message.text
     };
   },
-  computed: {
-    isMessageEmpty() {
-      return this.text.length === 0;
-    }
-  },
   methods: {
     cancelEditing() {
       this.$emit("onCancelEditing");
@@ -41,7 +37,8 @@ export default {
       await messagesRef.child(message.id).update({ text: this.text });
       this.cancelEditing();
     }
-  }
+  },
+  mixins: [isMessageEmpty]
 };
 </script>
 

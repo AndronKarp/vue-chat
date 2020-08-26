@@ -25,6 +25,7 @@
 <script>
 import { messagesRef } from "../configs/firebase";
 import { mapGetters } from "vuex";
+import isMessageEmpty from "../mixins/is-message-empty";
 
 export default {
   data() {
@@ -33,10 +34,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["currentUser"]),
-    isMessageEmpty() {
-      return this.text.length === 0;
-    }
+    ...mapGetters(["currentUser"])
   },
   methods: {
     sendMessage() {
@@ -47,7 +45,8 @@ export default {
       });
       this.text = "";
     }
-  }
+  },
+  mixins: [isMessageEmpty]
 };
 </script>
 
