@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-row class="fill-height" justify="center">
     <v-col cols="10">
       <MessageList v-if="messages.length" />
       <span class="mb-2" v-else>No messages yet!</span>

@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div class="d-flex fill-height">
     <TheNav v-model="isNavVisible" />
     <TheHeader @navButtonClick="toggleNav" />
     <v-main>
