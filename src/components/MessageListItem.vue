@@ -12,8 +12,8 @@
           <v-list-item-subtitle>{{ message.name }}</v-list-item-subtitle>
         </v-list-item-content>
         <v-list-item-action
-          :hidden="!hover || !isCurrentUserSender"
           class="flex-row align-center"
+          :class="{ 'd-none': !hover || !isCurrentUserSender }"
         >
           <v-icon class="mr-2" dense @click="startEditing">mdi-pencil</v-icon>
           <v-icon dense @click="deleteMessage(message)">mdi-delete</v-icon>
