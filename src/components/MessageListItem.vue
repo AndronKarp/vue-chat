@@ -15,8 +15,12 @@
           class="flex-row align-center"
           :class="{ 'd-none': !hover || !isCurrentUserSender }"
         >
-          <v-icon class="mr-2" dense @click="startEditing">mdi-pencil</v-icon>
-          <v-icon dense @click="deleteMessage(message)">mdi-delete</v-icon>
+          <v-btn x-small icon @click="startEditing">
+            <v-icon>mdi-pencil</v-icon>
+          </v-btn>
+          <v-btn x-small icon @click="deleteMessage(message)">
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
         </v-list-item-action>
       </template>
     </v-list-item>
