@@ -1,56 +1,53 @@
 <template>
-  <v-form @submit.prevent="sendMessage" class="d-flex flex-column align-center">
+  <v-form @submit.prevent="sendMessage">
     <v-text-field
-      v-model="$v.form.text.$model"
+      v-model="text"
       type="text"
       placeholder="Write your message..."
       outlined
       dense
-      style="width: 100%"
-    ></v-text-field>
-    <v-btn
-      type="submit"
-      color="amber darken-4"
-      :dark="!$v.form.$invalid"
-      :disabled="$v.form.$invalid"
-      >Send</v-btn
     >
+      <template #append>
+        <v-btn
+          :disabled="isMessageEmpty"
+          icon
+          small
+          type="submit"
+          style="top: -2px"
+        >
+          <v-icon>mdi-send</v-icon>
+        </v-btn>
+      </template>
+    </v-text-field>
   </v-form>
 </template>
 
 <script>
-import { validationMixin } from "vuelidate";
-import { required } from "vuelidate/lib/validators";
 import { messagesRef } from "../configs/firebase";
 import { mapGetters } from "vuex";
 
 export default {
   data() {
     return {
-      form: {
-        text: null
-      }
+      text: ""
     };
   },
-  validations: {
-    form: {
-      text: { required }
-    }
-  },
   computed: {
-    ...mapGetters(["currentUser"])
+    ...mapGetters(["currentUser"]),
+    isMessageEmpty() {
+      return this.text.length === 0;
+    }
   },
   methods: {
     sendMessage() {
       messagesRef.push({
         name: this.currentUser.displayName,
-        text: this.form.text,
+        text: this.text,
         senderId: this.currentUser.uid
       });
-      this.form.text = null;
+      this.text = "";
     }
-  },
-  mixins: [validationMixin]
+  }
 };
 </script>
 
