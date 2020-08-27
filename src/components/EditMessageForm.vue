@@ -1,6 +1,6 @@
 <template>
   <v-form @submit.prevent="editMessage(message)" class="flex-grow-1">
-    <v-text-field outlined dense v-model="text">
+    <v-text-field v-model="text" outlined dense hide-details>
       <template #append-outer>
         <v-btn icon small :disabled="isMessageEmpty" type="submit">
           <v-icon>mdi-check</v-icon>

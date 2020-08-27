@@ -4,6 +4,7 @@
       v-model="text"
       type="text"
       placeholder="Write your message..."
+      hide-details
       outlined
       dense
     >
