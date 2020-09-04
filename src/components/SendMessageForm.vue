@@ -1,12 +1,14 @@
 <template>
-  <v-form @submit.prevent="sendMessage">
+  <v-form
+    @submit.prevent="sendMessage"
+    style="position: absolute; bottom: 0; width: 100%"
+  >
     <v-text-field
       v-model="text"
       type="text"
       placeholder="Write your message..."
       hide-details
-      outlined
-      dense
+      solo
     >
       <template #append>
         <v-btn

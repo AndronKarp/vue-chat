@@ -1,5 +1,11 @@
 <template>
-  <v-list class="mb-8" subheader two-line elevation="4">
+  <v-list
+    subheader
+    two-line
+    class="fill-height pt-14 pb-12"
+    max-height="100vh"
+    style="overflow-y: auto"
+  >
     <v-subheader>Messages</v-subheader>
     <MessageListItem
       v-for="(message, index) in messages"
