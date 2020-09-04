@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer :value="value" @input="onInput" app>
+  <v-navigation-drawer temporary :value="value" @input="onInput" app>
     <v-list dense>
       <v-list-item @click="signOut">
         <v-list-item-action>
