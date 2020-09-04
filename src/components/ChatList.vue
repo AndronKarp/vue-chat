@@ -8,7 +8,7 @@
       height="56px"
       width="100%"
     >
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="toggleNav"></v-app-bar-nav-icon>
     </v-toolbar>
     <v-list class="pt-14" two-line max-height="100vh" style="overflow-y: auto">
       <template v-for="(item, index) in items">
@@ -40,6 +40,11 @@ export default {
         { title: "John Doe", subtitle: "Lorem Ipsum Dolor Sit Amet" }
       ]
     };
+  },
+  methods: {
+    toggleNav() {
+      this.$emit("navButtonClick");
+    }
   }
 };
 </script>
