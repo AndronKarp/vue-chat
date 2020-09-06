@@ -5,6 +5,7 @@
   >
     <v-text-field
       v-model="text"
+      class="rounded-0"
       type="text"
       placeholder="Write your message..."
       hide-details
