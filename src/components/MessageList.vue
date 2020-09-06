@@ -1,18 +1,16 @@
 <template>
-  <v-list
-    subheader
-    two-line
-    class="fill-height pt-14 pb-12"
+  <v-card
+    class="fill-height pt-14 pb-12 d-flex flex-column"
     max-height="100vh"
     style="overflow-y: auto"
   >
-    <v-subheader>Messages</v-subheader>
+    <v-spacer></v-spacer>
     <MessageListItem
       v-for="(message, index) in messages"
       :key="index"
       :message="message"
     />
-  </v-list>
+  </v-card>
 </template>
 
 <script>

@@ -1,36 +1,31 @@
 <template>
   <v-hover v-slot:default="{ hover }">
-    <v-list-item>
-      <EditMessageForm
-        v-if="isMessageEditing"
-        :message="message"
-        @onCancelEditing="cancelEditing"
-      />
+    <v-card tile class="d-flex">
+      <v-card-text v-if="isMessageEditing">
+        <EditMessageForm :message="message" @onCancelEditing="cancelEditing" />
+      </v-card-text>
       <template v-else>
-        <v-list-item-content>
-          <v-list-item-title>{{ message.text }}</v-list-item-title>
-          <v-list-item-subtitle>{{ message.name }}</v-list-item-subtitle>
-        </v-list-item-content>
-        <v-list-item-action
-          class="flex-row align-center"
-          :class="{ 'd-none': !hover || !isCurrentUserSender }"
-        >
+        <v-card-text>
+          <div class="text--primary text-body-1">{{ message.text }}</div>
+          <div>{{ message.name }}</div>
+        </v-card-text>
+        <v-card-actions v-if="isCurrentUserSender && hover">
           <v-btn x-small icon @click="startEditing">
             <v-icon>mdi-pencil</v-icon>
           </v-btn>
           <v-btn x-small icon @click="deleteMessage(message)">
             <v-icon>mdi-delete</v-icon>
           </v-btn>
-        </v-list-item-action>
+        </v-card-actions>
       </template>
-    </v-list-item>
+    </v-card>
   </v-hover>
 </template>
 
 <script>
 import { messagesRef } from "../configs/firebase";
-import EditMessageForm from "./EditMessageForm";
 import { mapGetters } from "vuex";
+import EditMessageForm from "../components/EditMessageForm";
 
 export default {
   props: {
