@@ -1,13 +1,6 @@
 <template>
   <v-card class="fill-height" tile style="position: relative">
-    <v-toolbar
-      color="amber darken-4"
-      flat
-      dark
-      absolute
-      height="56px"
-      width="100%"
-    >
+    <v-toolbar color="amber darken-4" dark absolute height="56px" width="100%">
       <v-toolbar-title>chatName</v-toolbar-title>
     </v-toolbar>
     <MessageList />
