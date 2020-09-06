@@ -1,18 +1,20 @@
 <template>
   <div class="d-flex fill-height">
     <TheNav v-model="isNavVisible" />
-    <TheHeader @navButtonClick="toggleNav" />
     <v-main>
-      <v-container class="fill-height">
-        <slot></slot>
-      </v-container>
+      <v-row class="fill-height" no-gutters>
+        <v-col> </v-col>
+        <v-col cols="12" sm="8" md="9" lg="10">
+          <ChatRoom />
+        </v-col>
+      </v-row>
     </v-main>
   </div>
 </template>
 
 <script>
 import TheNav from "../components/TheNav";
-import TheHeader from "../components/TheHeader";
+import ChatRoom from "../components/ChatRoom";
 
 export default {
   data() {
@@ -27,7 +29,7 @@ export default {
   },
   components: {
     TheNav,
-    TheHeader
+    ChatRoom
   }
 };
 </script>
