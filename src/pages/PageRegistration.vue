@@ -154,11 +154,11 @@ export default {
     async register() {
       this.isFormSubmitting = true;
       await auth.createUserWithEmailAndPassword(
-        this.form.email,
-        this.form.password
+        this.form.email.value,
+        this.form.password.value
       );
       const currentUser = auth.currentUser;
-      await currentUser.updateProfile({ displayName: this.form.name });
+      await currentUser.updateProfile({ displayName: this.form.name.value });
       this.$router.push("/");
       this.isFormSubmitting = false;
       userEmailsRef.child(currentUser.uid).set({ value: currentUser.email });
