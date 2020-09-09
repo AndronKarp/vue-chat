@@ -33,6 +33,12 @@ import { mapGetters } from "vuex";
 import isMessageEmpty from "../mixins/is-message-empty";
 
 export default {
+  props: {
+    chatId: {
+      type: String,
+      required: true
+    }
+  },
   data() {
     return {
       text: ""
@@ -43,7 +49,7 @@ export default {
   },
   methods: {
     sendMessage() {
-      messagesRef.push({
+      messagesRef.child(this.chatId).push({
         name: this.currentUser.displayName,
         text: this.text,
         senderId: this.currentUser.uid

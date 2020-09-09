@@ -4,15 +4,15 @@
       <v-app-bar-nav-icon @click="toggleNav"></v-app-bar-nav-icon>
     </v-toolbar>
     <v-list class="pt-14" two-line max-height="100vh" style="overflow-y: auto">
-      <template v-for="(item, index) in items">
-        <v-list-item :key="item.title">
+      <template v-for="(chat, index) in chats">
+        <v-list-item :key="chat.id" @click="selectChat(chat)">
           <v-list-item-avatar color="amber darken-4">
             <v-icon color="white">mdi-account</v-icon>
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title>{{ chat.title }}</v-list-item-title>
             <v-list-item-subtitle>
-              {{ item.subtitle }}
+              {{ chat.lastMessage }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
@@ -23,21 +23,30 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { chatsRef } from "../configs/firebase";
+
 export default {
   data() {
     return {
-      items: [
-        { title: "John Doe", subtitle: "Lorem Ipsum Dolor Sit Amet" },
-        { title: "John Doe", subtitle: "Lorem Ipsum Dolor Sit Amet" },
-        { title: "John Doe", subtitle: "Lorem Ipsum Dolor Sit Amet" },
-        { title: "John Doe", subtitle: "Lorem Ipsum Dolor Sit Amet" }
-      ]
+      chats: []
     };
+  },
+  computed: {
+    ...mapGetters(["currentUser"])
   },
   methods: {
     toggleNav() {
       this.$emit("navButtonClick");
+    },
+    selectChat(chat) {
+      this.$emit("chatSelect", chat);
     }
+  },
+  created() {
+    chatsRef.child(this.currentUser.uid).on("child_added", snapshot => {
+      this.chats.push({ ...snapshot.val(), id: snapshot.key });
+    });
   }
 };
 </script>
