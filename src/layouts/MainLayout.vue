@@ -25,7 +25,7 @@ import ChatRoom from "../components/ChatRoom";
 export default {
   data() {
     return {
-      isNavVisible: null,
+      isNavVisible: false,
       selectedChat: null
     };
   },

@@ -1,6 +1,6 @@
 <template>
-  <v-navigation-drawer temporary :value="value" @input="onInput" app>
-    <v-list dense>
+  <v-navigation-drawer temporary :value="isVisible" @input="onInput" app>
+    <v-list nav dense>
       <v-list-item @click="signOut">
         <v-list-item-action>
           <v-icon>mdi-logout</v-icon>
@@ -12,13 +12,18 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import { auth } from "../configs/firebase";
 
 export default {
-  props: ["value"],
-  computed: {
-    ...mapGetters(["currentUser"])
+  props: {
+    isVisible: {
+      type: Boolean,
+      required: true
+    }
+  },
+  model: {
+    prop: "isVisible",
+    event: "input"
   },
   methods: {
     onInput(value) {
