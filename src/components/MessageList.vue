@@ -15,24 +15,13 @@
 
 <script>
 import MessageListItem from "./MessageListItem";
-import { messagesRef } from "../configs/firebase";
 
 export default {
   props: {
-    chatId: {
-      type: String,
+    messages: {
+      type: Array,
       required: true
     }
-  },
-  data() {
-    return {
-      messages: []
-    };
-  },
-  created() {
-    messagesRef.child(this.chatId).on("child_added", snapshot => {
-      this.messages.push({ ...snapshot.val(), id: snapshot.key });
-    });
   },
   components: {
     MessageListItem

@@ -28,17 +28,10 @@
 </template>
 
 <script>
-import { messagesRef } from "../configs/firebase";
 import { mapGetters } from "vuex";
 import isMessageEmpty from "../mixins/is-message-empty";
 
 export default {
-  props: {
-    chatId: {
-      type: String,
-      required: true
-    }
-  },
   data() {
     return {
       text: ""
@@ -49,10 +42,9 @@ export default {
   },
   methods: {
     sendMessage() {
-      messagesRef.child(this.chatId).push({
-        name: this.currentUser.displayName,
+      this.$emit("sendMessage", {
         text: this.text,
-        senderId: this.currentUser.uid
+        sender: { id: this.currentUser.uid, name: this.currentUser.displayName }
       });
       this.text = "";
     }

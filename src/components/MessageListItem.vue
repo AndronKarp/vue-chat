@@ -2,7 +2,7 @@
   <v-card tile class="d-flex">
     <v-card-text>
       <div class="text--primary text-body-1">{{ message.text }}</div>
-      <div>{{ message.name }}</div>
+      <div>{{ message.sender.name }}</div>
     </v-card-text>
   </v-card>
 </template>
