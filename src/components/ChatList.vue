@@ -7,7 +7,7 @@
       <template v-for="(chat, index) in chats">
         <v-list-item :key="chat.id" @click="selectChat(chat)">
           <v-list-item-avatar color="amber darken-4">
-            <v-icon color="white">mdi-account</v-icon>
+            <v-icon color="white">mdi-chat</v-icon>
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ chat.title }}</v-list-item-title>
