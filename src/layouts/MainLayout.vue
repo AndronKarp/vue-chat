@@ -7,7 +7,11 @@
           <ChatList @navButtonClick="toggleNav" @chatSelect="setSelectedChat" />
         </v-col>
         <v-col :class="{ 'd-flex justify-center': !selectedChat }">
-          <ChatRoom v-if="selectedChat" :selectedChat="selectedChat" />
+          <ChatRoom
+            v-if="selectedChat"
+            :selectedChat="selectedChat"
+            :key="selectedChat.id"
+          />
           <p v-else class="text--secondary align-self-center">
             Please select a chat to start messaging
           </p>

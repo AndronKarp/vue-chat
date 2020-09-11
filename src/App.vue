@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { userEmailsRef, auth } from "./configs/firebase";
+import { auth } from "./configs/firebase";
 import { mapGetters } from "vuex";
 
 export default {
@@ -21,9 +21,6 @@ export default {
     setFirebaseEvents() {
       auth.onAuthStateChanged(user => {
         this.$store.dispatch("authorize", user);
-      });
-      userEmailsRef.on("child_added", snapshot => {
-        this.$store.dispatch("addUserEmail", snapshot.val());
       });
     }
   }

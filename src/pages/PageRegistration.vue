@@ -36,7 +36,7 @@
 <script>
 import { validationMixin } from "vuelidate";
 import * as validators from "vuelidate/lib/validators";
-import { auth, userEmailsRef } from "../configs/firebase";
+import { auth } from "../configs/firebase";
 import { mapGetters } from "vuex";
 
 export default {
@@ -161,7 +161,6 @@ export default {
       await currentUser.updateProfile({ displayName: this.form.name.value });
       this.$router.push("/");
       this.isFormSubmitting = false;
-      userEmailsRef.child(currentUser.uid).set({ value: currentUser.email });
     }
   },
   mixins: [validationMixin]

@@ -6,7 +6,7 @@
           <v-list-item-content>
             <v-list-item-title>{{ selectedChat.title }}</v-list-item-title>
             <v-list-item-subtitle
-              >{{ numberOfMembers }} members</v-list-item-subtitle
+              >{{ selectedChat.members.length }} members</v-list-item-subtitle
             >
           </v-list-item-content>
         </v-list-item>
@@ -20,7 +20,7 @@
 <script>
 import SendMessageForm from "../components/SendMessageForm";
 import MessageList from "../components/MessageList";
-import { messagesRef, chatsRef } from "../configs/firebase";
+import { chatsRef } from "../configs/firebase";
 import { mapGetters } from "vuex";
 
 export default {
@@ -36,19 +36,23 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["currentUser"]),
-    numberOfMembers() {
-      return Object.keys(this.selectedChat.members).length;
-    }
+    ...mapGetters(["currentUser"])
   },
   created() {
     this.fetchMessages();
   },
   methods: {
     fetchMessages() {
-      messagesRef.child(this.selectedChat.id).on("child_added", snapshot => {
-        this.messages.push({ ...snapshot.val(), id: snapshot.key });
-      });
+      chatsRef
+        .doc(this.selectedChat.id)
+        .collection("messages")
+        .onSnapshot(snapshot => {
+          const arr = [];
+          snapshot.forEach(childSnapshot => {
+            arr.push({ id: childSnapshot.id, ...childSnapshot.data() });
+          });
+          this.messages = arr;
+        });
     },
     sendMessage(message) {
       this.saveMessageToDatabase(message);
@@ -57,10 +61,13 @@ export default {
       });
     },
     saveMessageToDatabase(message) {
-      messagesRef.child(this.selectedChat.id).push(message);
+      chatsRef
+        .doc(this.selectedChat.id)
+        .collection("messages")
+        .add(message);
     },
     updateChatLastMessage(value) {
-      chatsRef.child(this.selectedChat.id).update(value);
+      chatsRef.doc(this.selectedChat.id).update(value);
     }
   },
   components: {

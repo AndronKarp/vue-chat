@@ -45,17 +45,13 @@ export default {
   },
   created() {
     chatsRef
-      .orderByChild(`members/${this.currentUser.uid}`)
-      .equalTo(true)
-      .on("child_added", snapshot => {
-        this.chats.push({ ...snapshot.val(), id: snapshot.key });
-      });
-    chatsRef
-      .orderByChild(`members/${this.currentUser.uid}`)
-      .equalTo(true)
-      .on("child_changed", snapshot => {
-        const chat = this.chats.find(chat => chat.id === snapshot.key);
-        chat.lastMessage = snapshot.val().lastMessage;
+      .where("members", "array-contains", this.currentUser.uid)
+      .onSnapshot(snapshot => {
+        const arr = [];
+        snapshot.forEach(childSnapshot => {
+          arr.push({ id: childSnapshot.id, ...childSnapshot.data() });
+        });
+        this.chats = arr;
       });
   }
 };
