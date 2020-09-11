@@ -1,7 +1,16 @@
 <template>
   <v-card class="fill-height" tile style="position: relative">
     <v-toolbar color="amber darken-4" dark absolute height="56px" width="100%">
-      <v-toolbar-title>{{ selectedChat.title }}</v-toolbar-title>
+      <v-toolbar-title>
+        <v-list-item class="pa-0">
+          <v-list-item-content>
+            <v-list-item-title>{{ selectedChat.title }}</v-list-item-title>
+            <v-list-item-subtitle
+              >{{ numberOfMembers }} members</v-list-item-subtitle
+            >
+          </v-list-item-content>
+        </v-list-item>
+      </v-toolbar-title>
     </v-toolbar>
     <MessageList :messages="messages" />
     <SendMessageForm @sendMessage="sendMessage" />
@@ -27,7 +36,10 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["currentUser"])
+    ...mapGetters(["currentUser"]),
+    numberOfMembers() {
+      return Object.keys(this.selectedChat.members).length;
+    }
   },
   created() {
     this.fetchMessages();
