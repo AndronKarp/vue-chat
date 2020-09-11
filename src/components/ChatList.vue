@@ -44,13 +44,19 @@ export default {
     }
   },
   created() {
-    chatsRef.child(this.currentUser.uid).on("child_added", snapshot => {
-      this.chats.push({ ...snapshot.val(), id: snapshot.key });
-    });
-    chatsRef.child(this.currentUser.uid).on("child_changed", snapshot => {
-      const chat = this.chats.find(chat => chat.id === snapshot.key);
-      chat.lastMessage = snapshot.val().lastMessage;
-    });
+    chatsRef
+      .orderByChild(`members/${this.currentUser.uid}`)
+      .equalTo(true)
+      .on("child_added", snapshot => {
+        this.chats.push({ ...snapshot.val(), id: snapshot.key });
+      });
+    chatsRef
+      .orderByChild(`members/${this.currentUser.uid}`)
+      .equalTo(true)
+      .on("child_changed", snapshot => {
+        const chat = this.chats.find(chat => chat.id === snapshot.key);
+        chat.lastMessage = snapshot.val().lastMessage;
+      });
   }
 };
 </script>

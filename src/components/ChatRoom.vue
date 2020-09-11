@@ -48,9 +48,7 @@ export default {
       messagesRef.child(this.selectedChat.id).push(message);
     },
     updateChatLastMessage(value) {
-      chatsRef
-        .child(`${this.currentUser.uid}/${this.selectedChat.id}`)
-        .update(value);
+      chatsRef.child(this.selectedChat.id).update(value);
     }
   },
   components: {
