@@ -5,9 +5,9 @@
         <v-list-item class="pa-0">
           <v-list-item-content>
             <v-list-item-title>{{ selectedChat.title }}</v-list-item-title>
-            <v-list-item-subtitle
-              >{{ selectedChat.members.length }} members</v-list-item-subtitle
-            >
+            <v-list-item-subtitle>{{
+              selectedChat.members.length | appendMembersString
+            }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-toolbar-title>
@@ -28,6 +28,11 @@ export default {
     selectedChat: {
       type: Object,
       required: true
+    }
+  },
+  filters: {
+    appendMembersString(value) {
+      return value === 1 ? `${value} member` : `${value} members`;
     }
   },
   methods: {
