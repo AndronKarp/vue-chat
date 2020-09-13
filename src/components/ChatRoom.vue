@@ -12,7 +12,7 @@
         </v-list-item>
       </v-toolbar-title>
     </v-toolbar>
-    <MessageList :messages="messages" />
+    <MessageList :messages="response" />
     <SendMessageForm @sendMessage="sendMessage" />
   </v-card>
 </template>
@@ -20,8 +20,8 @@
 <script>
 import SendMessageForm from "../components/SendMessageForm";
 import MessageList from "../components/MessageList";
-import { chatsRef } from "../configs/firebase";
-import { mapGetters } from "vuex";
+import { database } from "../configs/firebase";
+import firestoreMixin from "../mixins/firestore-mixin";
 
 export default {
   props: {
@@ -30,50 +30,31 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      messages: []
-    };
-  },
-  computed: {
-    ...mapGetters(["currentUser"])
-  },
-  created() {
-    this.fetchMessages();
-  },
   methods: {
-    fetchMessages() {
-      chatsRef
-        .doc(this.selectedChat.id)
-        .collection("messages")
-        .onSnapshot(snapshot => {
-          const arr = [];
-          snapshot.forEach(childSnapshot => {
-            arr.push({ id: childSnapshot.id, ...childSnapshot.data() });
-          });
-          this.messages = arr;
-        });
-    },
     sendMessage(message) {
-      this.saveMessageToDatabase(message);
-      this.updateChatLastMessage({
-        lastMessage: `${this.currentUser.displayName}: ${message.text}`
-      });
+      this.addMessageToDatabase(message);
+      this.updateChatLastMessage(`${message.sender.name}: ${message.text}`);
     },
-    saveMessageToDatabase(message) {
-      chatsRef
-        .doc(this.selectedChat.id)
-        .collection("messages")
+    addMessageToDatabase(message) {
+      database
+        .collection(`chats/${this.selectedChat.id}/messages`)
         .add(message);
     },
-    updateChatLastMessage(value) {
-      chatsRef.doc(this.selectedChat.id).update(value);
+    updateChatLastMessage(lastMessage) {
+      database.doc(`chats/${this.selectedChat.id}`).update({ lastMessage });
     }
+  },
+  created() {
+    const messagesRef = database.collection(
+      `chats/${this.selectedChat.id}/messages`
+    );
+    this.setSnapshotListener(messagesRef);
   },
   components: {
     SendMessageForm,
     MessageList
-  }
+  },
+  mixins: [firestoreMixin]
 };
 </script>
 

@@ -4,7 +4,7 @@
       <v-app-bar-nav-icon @click="toggleNav"></v-app-bar-nav-icon>
     </v-toolbar>
     <v-list class="pt-14" two-line max-height="100vh" style="overflow-y: auto">
-      <template v-for="(chat, index) in chats">
+      <template v-for="(chat, index) in response">
         <v-list-item :key="chat.id" @click="selectChat(chat)">
           <v-list-item-avatar color="amber darken-4">
             <v-icon color="white">mdi-chat</v-icon>
@@ -24,14 +24,10 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { chatsRef } from "../configs/firebase";
+import { database } from "../configs/firebase";
+import firestoreMixin from "../mixins/firestore-mixin";
 
 export default {
-  data() {
-    return {
-      chats: []
-    };
-  },
   computed: {
     ...mapGetters(["currentUser"])
   },
@@ -44,16 +40,12 @@ export default {
     }
   },
   created() {
-    chatsRef
-      .where("members", "array-contains", this.currentUser.uid)
-      .onSnapshot(snapshot => {
-        const arr = [];
-        snapshot.forEach(childSnapshot => {
-          arr.push({ id: childSnapshot.id, ...childSnapshot.data() });
-        });
-        this.chats = arr;
-      });
-  }
+    const chatsRef = database
+      .collection("chats")
+      .where("members", "array-contains", this.currentUser.uid);
+    this.setSnapshotListener(chatsRef);
+  },
+  mixins: [firestoreMixin]
 };
 </script>
 

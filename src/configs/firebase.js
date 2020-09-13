@@ -14,7 +14,6 @@ const config = {
 firebase.initializeApp(config);
 
 const database = firebase.firestore();
-const chatsRef = database.collection("chats");
 const auth = firebase.auth();
 auth.getCurrentUser = () => {
   return new Promise((resolve, reject) => {
@@ -25,4 +24,4 @@ auth.getCurrentUser = () => {
   });
 };
 
-export { chatsRef, auth };
+export { database, auth };
