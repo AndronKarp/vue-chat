@@ -1,20 +1,11 @@
 <template>
   <div class="d-flex fill-height">
+    <TheHeader @navButtonClick="toggleNav" />
     <TheNav v-model="isNavVisible" />
     <v-main>
       <v-row class="fill-height" no-gutters>
-        <v-col cols="3">
-          <ChatList @navButtonClick="toggleNav" @chatSelect="setSelectedChat" />
-        </v-col>
-        <v-col :class="{ 'd-flex justify-center': !selectedChat }">
-          <ChatRoom
-            v-if="selectedChat"
-            :selectedChat="selectedChat"
-            :key="selectedChat.id"
-          />
-          <p v-else class="text--secondary align-self-center">
-            Please select a chat to start messaging
-          </p>
+        <v-col>
+          <slot></slot>
         </v-col>
       </v-row>
     </v-main>
@@ -22,29 +13,23 @@
 </template>
 
 <script>
+import TheHeader from "../components/TheHeader";
 import TheNav from "../components/TheNav";
-import ChatList from "../components/ChatList";
-import ChatRoom from "../components/ChatRoom";
 
 export default {
   data() {
     return {
-      isNavVisible: false,
-      selectedChat: null
+      isNavVisible: false
     };
   },
   methods: {
     toggleNav() {
       this.isNavVisible = !this.isNavVisible;
-    },
-    setSelectedChat(value) {
-      this.selectedChat = value;
     }
   },
   components: {
-    TheNav,
-    ChatRoom,
-    ChatList
+    TheHeader,
+    TheNav
   }
 };
 </script>
