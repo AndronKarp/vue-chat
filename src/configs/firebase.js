@@ -13,7 +13,10 @@ const config = {
 
 firebase.initializeApp(config);
 
-const database = firebase.firestore();
+const database = firebase.database();
+const usersRef = database.ref("users");
+const chatsRef = database.ref("chats");
+const messagesRef = database.ref("messages");
 const auth = firebase.auth();
 auth.getCurrentUser = () => {
   return new Promise((resolve, reject) => {
@@ -24,4 +27,4 @@ auth.getCurrentUser = () => {
   });
 };
 
-export { database, auth };
+export { usersRef, chatsRef, messagesRef, auth };

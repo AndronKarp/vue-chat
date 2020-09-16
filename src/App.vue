@@ -1,6 +1,6 @@
 <template>
   <v-app id="app">
-    <component :is="$route.meta.layout || 'div'">
+    <component :is="$route.meta.layout">
       <router-view></router-view>
     </component>
   </v-app>
@@ -15,12 +15,13 @@ export default {
     ...mapGetters(["currentUser"])
   },
   created() {
-    this.setFirebaseEvents();
+    this.setAuthObserver();
   },
   methods: {
-    setFirebaseEvents() {
+    setAuthObserver() {
       auth.onAuthStateChanged(user => {
         this.$store.dispatch("authorize", user);
+        if (user) this.$store.dispatch("fetchChats");
       });
     }
   }

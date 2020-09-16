@@ -30,6 +30,7 @@ export default {
       this.$emit("input", value);
     },
     async signOut() {
+      this.$store.dispatch("clearChats");
       await auth.signOut();
       this.$router.push("/auth");
     }
