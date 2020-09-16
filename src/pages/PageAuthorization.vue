@@ -41,10 +41,13 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import { mapGetters } from "vuex";
 import { auth } from "../configs/firebase";
 
 export default {
+  name: "PageAuthorization",
+
+  mixins: [validationMixin],
+
   data() {
     return {
       form: {
@@ -55,18 +58,20 @@ export default {
       isFormSubmitting: false
     };
   },
+
   validations: {
     form: {
       email: { required },
       password: { required }
     }
   },
+
   computed: {
-    ...mapGetters(["currentUser"]),
     authErrorMessage() {
       return this.authError ? "Invalid e-mail or password" : null;
     }
   },
+
   methods: {
     signIn() {
       this.authError = false;
@@ -79,8 +84,7 @@ export default {
         })
         .finally(() => (this.isFormSubmitting = false));
     }
-  },
-  mixins: [validationMixin]
+  }
 };
 </script>
 

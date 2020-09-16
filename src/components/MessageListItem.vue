@@ -9,6 +9,8 @@
 
 <script>
 export default {
+  name: "MessageListItem",
+
   props: {
     message: {
       type: Object,

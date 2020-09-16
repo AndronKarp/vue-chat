@@ -17,19 +17,23 @@ import TheHeader from "../components/TheHeader";
 import TheNav from "../components/TheNav";
 
 export default {
+  name: "MainLayout",
+
+  components: {
+    TheHeader,
+    TheNav
+  },
+
   data() {
     return {
       isNavVisible: false
     };
   },
+
   methods: {
     toggleNav() {
       this.isNavVisible = !this.isNavVisible;
     }
-  },
-  components: {
-    TheHeader,
-    TheNav
   }
 };
 </script>

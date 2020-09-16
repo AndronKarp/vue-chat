@@ -14,31 +14,36 @@
 </template>
 
 <script>
-import { messagesRef } from "../configs/firebase";
 import isMessageEmpty from "../mixins/is-message-empty";
+import { messagesRef } from "../configs/firebase";
 
 export default {
+  name: "FormEditMessage",
+
+  mixins: [isMessageEmpty],
+
   props: {
     message: {
       type: Object,
       required: true
     }
   },
+
   data() {
     return {
       text: this.message.text
     };
   },
+
   methods: {
-    cancelEditing() {
-      this.$emit("onCancelEditing");
-    },
     async editMessage(message) {
       await messagesRef.child(message.id).update({ text: this.text });
       this.cancelEditing();
+    },
+    cancelEditing() {
+      this.$emit("onCancelEditing");
     }
-  },
-  mixins: [isMessageEmpty]
+  }
 };
 </script>
 

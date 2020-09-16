@@ -11,12 +11,16 @@ import { auth } from "./configs/firebase";
 import { mapGetters } from "vuex";
 
 export default {
+  name: "App",
+
   computed: {
     ...mapGetters(["currentUser"])
   },
+
   created() {
     this.setAuthObserver();
   },
+
   methods: {
     setAuthObserver() {
       auth.onAuthStateChanged(user => {

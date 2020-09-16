@@ -15,16 +15,20 @@
 import { auth } from "../configs/firebase";
 
 export default {
+  name: "TheNav",
+
+  model: {
+    prop: "isVisible",
+    event: "input"
+  },
+
   props: {
     isVisible: {
       type: Boolean,
       required: true
     }
   },
-  model: {
-    prop: "isVisible",
-    event: "input"
-  },
+
   methods: {
     onInput(value) {
       this.$emit("input", value);

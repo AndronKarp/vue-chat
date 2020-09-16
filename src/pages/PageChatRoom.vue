@@ -12,23 +12,37 @@ import { messagesRef, chatsRef } from "../configs/firebase";
 import { mapGetters } from "vuex";
 
 export default {
+  name: "PageChatRoom",
+
+  components: {
+    FormSendMessage,
+    MessageList
+  },
+
   props: {
     id: {
       type: String,
       required: true
     }
   },
+
   data() {
     return {
       messages: {}
     };
   },
+
   computed: {
     ...mapGetters(["chats"]),
     chat() {
       return this.chats[this.id];
     }
   },
+
+  created() {
+    this.fetchMessages();
+  },
+
   methods: {
     fetchMessages() {
       messagesRef.child(this.id).on("value", snapshot => {
@@ -50,13 +64,6 @@ export default {
     updateChatLastMessage(lastMessage) {
       chatsRef.child(this.id).update({ lastMessage });
     }
-  },
-  created() {
-    this.fetchMessages();
-  },
-  components: {
-    FormSendMessage,
-    MessageList
   }
 };
 </script>

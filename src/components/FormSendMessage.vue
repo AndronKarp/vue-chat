@@ -28,18 +28,24 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import isMessageEmpty from "../mixins/is-message-empty";
+import { mapGetters } from "vuex";
 
 export default {
+  name: "FormSendMessage",
+
+  mixins: [isMessageEmpty],
+
   data() {
     return {
       text: ""
     };
   },
+
   computed: {
     ...mapGetters(["currentUser"])
   },
+
   methods: {
     sendMessage() {
       this.$emit("sendMessage", {
@@ -48,8 +54,7 @@ export default {
       });
       this.text = "";
     }
-  },
-  mixins: [isMessageEmpty]
+  }
 };
 </script>
 

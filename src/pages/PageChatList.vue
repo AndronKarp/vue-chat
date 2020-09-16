@@ -31,7 +31,11 @@
 import { mapGetters } from "vuex";
 
 export default {
-  computed: mapGetters(["chats"])
+  name: "PageChatList",
+
+  computed: {
+    ...mapGetters(["chats"])
+  }
 };
 </script>
 

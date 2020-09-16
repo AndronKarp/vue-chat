@@ -40,6 +40,10 @@ import { auth } from "../configs/firebase";
 import { mapGetters } from "vuex";
 
 export default {
+  name: "PageRegistration",
+
+  mixins: [validationMixin],
+
   data() {
     return {
       form: {
@@ -123,6 +127,7 @@ export default {
       isFormSubmitting: false
     };
   },
+
   validations() {
     const form = {};
     const formFields = Object.entries(this.form);
@@ -136,6 +141,7 @@ export default {
     });
     return { form };
   },
+
   computed: {
     ...mapGetters(["currentUser", "isEmailTaken"]),
     validationErrorMessages: () =>
@@ -150,6 +156,7 @@ export default {
         return errorMessages;
       }
   },
+
   methods: {
     async register() {
       this.isFormSubmitting = true;
@@ -157,13 +164,13 @@ export default {
         this.form.email.value,
         this.form.password.value
       );
-      const currentUser = auth.currentUser;
-      await currentUser.updateProfile({ displayName: this.form.name.value });
+      await this.currentUser.updateProfile({
+        displayName: this.form.name.value
+      });
       this.$router.push("/");
       this.isFormSubmitting = false;
     }
-  },
-  mixins: [validationMixin]
+  }
 };
 </script>
 

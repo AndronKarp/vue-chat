@@ -12,9 +12,12 @@
 import { mapGetters } from "vuex";
 
 export default {
+  name: "TheHeader",
+
   computed: {
     ...mapGetters(["currentUser"])
   },
+
   methods: {
     toggleNav() {
       this.$emit("navButtonClick");

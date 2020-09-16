@@ -13,14 +13,17 @@
 import MessageListItem from "./MessageListItem";
 
 export default {
+  name: "MessageList",
+
+  components: {
+    MessageListItem
+  },
+
   props: {
     messages: {
       type: Object,
       required: true
     }
-  },
-  components: {
-    MessageListItem
   }
 };
 </script>
