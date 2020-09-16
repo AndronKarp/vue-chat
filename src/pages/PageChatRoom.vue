@@ -1,12 +1,12 @@
 <template>
   <v-card class="fill-height d-flex flex-column" tile>
     <MessageList :messages="messages" />
-    <SendMessageForm @sendMessage="sendMessage" />
+    <FormSendMessage @sendMessage="sendMessage" />
   </v-card>
 </template>
 
 <script>
-import SendMessageForm from "../components/SendMessageForm";
+import FormSendMessage from "../components/FormSendMessage";
 import MessageList from "../components/MessageList";
 import { messagesRef, chatsRef } from "../configs/firebase";
 import { mapGetters } from "vuex";
@@ -55,7 +55,7 @@ export default {
     this.fetchMessages();
   },
   components: {
-    SendMessageForm,
+    FormSendMessage,
     MessageList
   }
 };
