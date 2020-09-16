@@ -1,13 +1,9 @@
 <template>
-  <v-card
-    class="fill-height pt-14 pb-12 d-flex flex-column"
-    max-height="100vh"
-    style="overflow-y: auto"
-  >
+  <v-card class="flex-fill d-flex flex-column">
     <v-spacer></v-spacer>
     <MessageListItem
-      v-for="message in messages"
-      :key="message.id"
+      v-for="[key, message] in Object.entries(messages)"
+      :key="key"
       :message="message"
     />
   </v-card>
@@ -19,7 +15,7 @@ import MessageListItem from "./MessageListItem";
 export default {
   props: {
     messages: {
-      type: Array,
+      type: Object,
       required: true
     }
   },

@@ -9,12 +9,24 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "PageChatList",
     meta: {
       requiresAuth: true,
       layout: MainLayout
     },
-    component: () => import(/* webpackChunkName: "home" */ "../pages/PageHome")
+    component: () =>
+      import(/* webpackChunkName: "chat-list" */ "../pages/PageChatList")
+  },
+  {
+    path: "/chats/:id",
+    name: "PageChatRoom",
+    props: true,
+    meta: {
+      requiresAuth: true,
+      layout: MainLayout
+    },
+    component: () =>
+      import(/* webpackChunkName: "chat-room" */ "../pages/PageChatRoom")
   },
   {
     path: "/reg",

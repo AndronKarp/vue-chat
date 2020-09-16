@@ -1,7 +1,7 @@
 <template>
   <v-form
     @submit.prevent="sendMessage"
-    style="position: absolute; bottom: 0; width: 100%"
+    style="position: sticky; bottom: 0; width: 100%"
   >
     <v-text-field
       v-model="text"
