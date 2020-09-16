@@ -11,6 +11,7 @@ const routes = [
     path: "/",
     name: "PageChatList",
     meta: {
+      title: "Vue Chat",
       requiresAuth: true,
       layout: MainLayout
     },
@@ -22,6 +23,7 @@ const routes = [
     name: "PageChatRoom",
     props: true,
     meta: {
+      title: "Some chat",
       requiresAuth: true,
       layout: MainLayout
     },
