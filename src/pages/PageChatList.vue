@@ -1,15 +1,15 @@
 <template>
   <v-card class="fill-height" tile>
     <v-list two-line class="pa-0">
-      <template v-for="([key, chat], index) in Object.entries(chats)">
+      <template v-for="([id, chat], index) in Object.entries(chats)">
         <v-list-item
           :to="{
             name: 'PageChatRoom',
             params: {
-              id: key
+              chatId: id
             }
           }"
-          :key="key"
+          :key="id"
         >
           <v-list-item-avatar color="amber darken-4">
             <v-icon color="white">mdi-chat</v-icon>

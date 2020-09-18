@@ -19,7 +19,7 @@ const routes = [
       import(/* webpackChunkName: "chat-list" */ "../pages/PageChatList")
   },
   {
-    path: "/chats/:id",
+    path: "/chats/:chatId",
     name: "PageChatRoom",
     props: true,
     meta: {

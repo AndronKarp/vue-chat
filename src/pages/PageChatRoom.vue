@@ -1,6 +1,6 @@
 <template>
   <v-card class="fill-height d-flex flex-column" tile>
-    <MessageList :messages="messages" />
+    <MessageList :messages="messages" @message-delete="onMessageDelete" />
     <FormSendMessage @sendMessage="sendMessage" />
   </v-card>
 </template>
@@ -20,7 +20,7 @@ export default {
   },
 
   props: {
-    id: {
+    chatId: {
       type: String,
       required: true
     }
@@ -28,14 +28,20 @@ export default {
 
   data() {
     return {
-      messages: {}
+      messages: []
     };
   },
 
   computed: {
     ...mapGetters(["chats"]),
     chat() {
-      return this.chats[this.id];
+      return this.chats[this.chatId];
+    },
+    lastMessage() {
+      const lastMessage = this.messages[this.messages.length - 1];
+      return lastMessage
+        ? `${lastMessage.sender.name}: ${lastMessage.text}`
+        : "";
     }
   },
 
@@ -45,24 +51,38 @@ export default {
 
   methods: {
     fetchMessages() {
-      messagesRef.child(this.id).on("value", snapshot => {
-        snapshot.forEach(childSnapshot => {
-          this.$set(this.messages, childSnapshot.key, childSnapshot.val());
-        });
+      messagesRef.child(this.chatId).on("child_added", snapshot => {
+        this.messages.push({ id: snapshot.key, ...snapshot.val() });
       });
-      messagesRef.child(this.id).on("child_removed", snapshot => {
-        this.$delete(this.messages, snapshot.key);
+      messagesRef.child(this.chatId).on("child_changed", snapshot => {
+        const updatedMessage = this.messages.find(
+          message => message.id === snapshot.key
+        );
+        updatedMessage.text = snapshot.val().text;
+      });
+      messagesRef.child(this.chatId).on("child_removed", snapshot => {
+        const deletedMessageIndex = this.messages.findIndex(
+          message => message.id === snapshot.key
+        );
+        this.messages.splice(deletedMessageIndex, 1);
       });
     },
-    sendMessage(message) {
-      this.addMessageToDatabase(message);
-      this.updateChatLastMessage(`${message.sender.name}: ${message.text}`);
+    async onMessageDelete(messageId) {
+      await this.deleteMessageFromDatabase(messageId);
+      this.updateChatLastMessage();
     },
-    addMessageToDatabase(message) {
-      messagesRef.child(this.id).push(message);
+    async deleteMessageFromDatabase(messageId) {
+      await messagesRef.child(`${this.chatId}/${messageId}`).remove();
     },
-    updateChatLastMessage(lastMessage) {
-      chatsRef.child(this.id).update({ lastMessage });
+    updateChatLastMessage() {
+      chatsRef.child(this.chatId).update({ lastMessage: this.lastMessage });
+    },
+    async sendMessage(message) {
+      await this.addMessageToDatabase(message);
+      this.updateChatLastMessage();
+    },
+    async addMessageToDatabase(message) {
+      await messagesRef.child(this.chatId).push(message);
     }
   }
 };
