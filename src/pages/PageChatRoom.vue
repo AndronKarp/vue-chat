@@ -1,7 +1,7 @@
 <template>
   <v-card class="fill-height d-flex flex-column" tile>
     <MessageList :messages="messages" @message-delete="onMessageDelete" />
-    <FormSendMessage @sendMessage="sendMessage" />
+    <FormSendMessage @message-send="onMessageSend" />
   </v-card>
 </template>
 
@@ -28,7 +28,7 @@ export default {
 
   data() {
     return {
-      messages: []
+      messages: {}
     };
   },
 
@@ -38,7 +38,7 @@ export default {
       return this.chats[this.chatId];
     },
     lastMessage() {
-      const lastMessage = this.messages[this.messages.length - 1];
+      const lastMessage = Object.values(this.messages).pop();
       return lastMessage
         ? `${lastMessage.sender.name}: ${lastMessage.text}`
         : "";
@@ -51,20 +51,13 @@ export default {
 
   methods: {
     fetchMessages() {
-      messagesRef.child(this.chatId).on("child_added", snapshot => {
-        this.messages.push({ id: snapshot.key, ...snapshot.val() });
+      messagesRef.child(this.chatId).on("value", snapshot => {
+        snapshot.forEach(childSnapshot => {
+          this.$set(this.messages, childSnapshot.key, childSnapshot.val());
+        });
       });
-      messagesRef.child(this.chatId).on("child_changed", snapshot => {
-        const updatedMessage = this.messages.find(
-          message => message.id === snapshot.key
-        );
-        updatedMessage.text = snapshot.val().text;
-      });
-      messagesRef.child(this.chatId).on("child_removed", snapshot => {
-        const deletedMessageIndex = this.messages.findIndex(
-          message => message.id === snapshot.key
-        );
-        this.messages.splice(deletedMessageIndex, 1);
+      messagesRef.child(this.chatId).on("child_removed", ({ key }) => {
+        this.$delete(this.messages, key);
       });
     },
     async onMessageDelete(messageId) {
@@ -77,7 +70,7 @@ export default {
     updateChatLastMessage() {
       chatsRef.child(this.chatId).update({ lastMessage: this.lastMessage });
     },
-    async sendMessage(message) {
+    async onMessageSend(message) {
       await this.addMessageToDatabase(message);
       this.updateChatLastMessage();
     },

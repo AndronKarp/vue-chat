@@ -48,7 +48,7 @@ export default {
 
   methods: {
     sendMessage() {
-      this.$emit("sendMessage", {
+      this.$emit("message-send", {
         text: this.text,
         sender: { id: this.currentUser.uid, name: this.currentUser.displayName }
       });
