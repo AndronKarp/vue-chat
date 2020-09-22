@@ -6,7 +6,7 @@
           :to="{
             name: 'PageChatRoom',
             params: {
-              chatId: id
+              id
             }
           }"
           :key="id"

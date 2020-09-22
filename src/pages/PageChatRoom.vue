@@ -19,7 +19,7 @@ export default {
   },
 
   props: {
-    chatId: {
+    id: {
       type: String,
       required: true
     }
@@ -46,13 +46,13 @@ export default {
 
   methods: {
     fetchMessages() {
-      messagesRef.child(this.chatId).on("child_added", snapshot => {
+      messagesRef.child(this.id).on("child_added", snapshot => {
         this.$set(this.messages, snapshot.key, snapshot.val());
       });
-      messagesRef.child(this.chatId).on("child_changed", snapshot => {
+      messagesRef.child(this.id).on("child_changed", snapshot => {
         this.messages[snapshot.key].text = snapshot.val().text;
       });
-      messagesRef.child(this.chatId).on("child_removed", ({ key }) => {
+      messagesRef.child(this.id).on("child_removed", ({ key }) => {
         this.$delete(this.messages, key);
       });
     },
@@ -61,17 +61,17 @@ export default {
       this.updateChatLastMessage();
     },
     async deleteMessageFromDatabase(messageId) {
-      await messagesRef.child(`${this.chatId}/${messageId}`).remove();
+      await messagesRef.child(`${this.id}/${messageId}`).remove();
     },
     updateChatLastMessage() {
-      chatsRef.child(this.chatId).update({ lastMessage: this.lastMessage });
+      chatsRef.child(this.id).update({ lastMessage: this.lastMessage });
     },
     async onMessageSend(message) {
       await this.addMessageToDatabase(message);
       this.updateChatLastMessage();
     },
     async addMessageToDatabase(message) {
-      await messagesRef.child(this.chatId).push(message);
+      await messagesRef.child(this.id).push(message);
     }
   }
 };
