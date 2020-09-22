@@ -51,10 +51,11 @@ export default {
 
   methods: {
     fetchMessages() {
-      messagesRef.child(this.chatId).on("value", snapshot => {
-        snapshot.forEach(childSnapshot => {
-          this.$set(this.messages, childSnapshot.key, childSnapshot.val());
-        });
+      messagesRef.child(this.chatId).on("child_added", snapshot => {
+        this.$set(this.messages, snapshot.key, snapshot.val());
+      });
+      messagesRef.child(this.chatId).on("child_changed", snapshot => {
+        this.messages[snapshot.key].text = snapshot.val().text;
       });
       messagesRef.child(this.chatId).on("child_removed", ({ key }) => {
         this.$delete(this.messages, key);
