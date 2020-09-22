@@ -9,7 +9,6 @@
 import FormSendMessage from "../components/FormSendMessage";
 import MessageList from "../components/MessageList";
 import { messagesRef, chatsRef } from "../configs/firebase";
-import { mapGetters } from "vuex";
 
 export default {
   name: "PageChatRoom",
@@ -33,10 +32,6 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["chats"]),
-    chat() {
-      return this.chats[this.chatId];
-    },
     lastMessage() {
       const lastMessage = Object.values(this.messages).pop();
       return lastMessage
