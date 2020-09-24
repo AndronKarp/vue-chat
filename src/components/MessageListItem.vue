@@ -1,15 +1,34 @@
 <template>
-  <v-card tile class="d-flex">
-    <v-card-text>
-      <div class="text--primary text-body-1">{{ message.text }}</div>
-      <div>{{ message.sender.name }}</div>
-    </v-card-text>
-    <v-card-actions v-if="isCurrentUserSender">
-      <v-btn icon @click="deleteMessage">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </v-card-actions>
-  </v-card>
+  <v-alert
+    :class="{ 'align-self-end': isCurrentUserSender }"
+    elevation="2"
+    dense
+  >
+    <v-row no-gutters>
+      <v-col class="grow">
+        <div>{{ message.text }}</div>
+        <div class="text--secondary text-body-2">{{ message.sender.name }}</div>
+      </v-col>
+
+      <v-col class="shrink pl-4" v-if="isCurrentUserSender">
+        <v-menu bottom>
+          <template #activator="{ on, attrs }">
+            <v-btn x-small icon v-bind="attrs" v-on="on">
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+
+          <v-list>
+            <v-list-item @click="deleteMessage">
+              <v-list-item-content>
+                <v-list-item-title>Delete</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-col>
+    </v-row>
+  </v-alert>
 </template>
 
 <script>

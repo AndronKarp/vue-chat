@@ -1,5 +1,5 @@
 <template>
-  <v-card class="flex-fill d-flex flex-column">
+  <v-card class="px-4 flex-fill d-flex flex-column align-start">
     <v-spacer></v-spacer>
     <MessageListItem
       v-for="[id, message] in Object.entries(messages)"
