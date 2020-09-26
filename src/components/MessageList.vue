@@ -5,7 +5,7 @@
       v-for="message in messages"
       :key="message.id"
       :message="message"
-      @delete-button-click="onDeleteButtonClick(message.id)"
+      @remove-button-click="onRemoveButtonClick(message.id)"
     />
   </v-card>
 </template>
@@ -28,8 +28,8 @@ export default {
   },
 
   methods: {
-    onDeleteButtonClick(messageId) {
-      this.$emit("message-delete", messageId);
+    onRemoveButtonClick(messageId) {
+      this.$emit("message-remove", messageId);
     }
   }
 };

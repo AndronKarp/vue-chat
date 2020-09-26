@@ -19,9 +19,9 @@
           </template>
 
           <v-list>
-            <v-list-item @click="deleteMessage">
+            <v-list-item @click="removeMessage">
               <v-list-item-content>
-                <v-list-item-title>Delete</v-list-item-title>
+                <v-list-item-title>Remove</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -52,8 +52,8 @@ export default {
   },
 
   methods: {
-    deleteMessage() {
-      this.$emit("delete-button-click");
+    removeMessage() {
+      this.$emit("remove-button-click");
     }
   }
 };

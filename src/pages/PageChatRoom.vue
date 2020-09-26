@@ -1,7 +1,10 @@
 <template>
   <v-card class="fill-height d-flex flex-column" tile>
-    <MessageList :messages="messages" @message-delete="onMessageDelete" />
-    <FormSendMessage @message-send="onMessageSend" />
+    <MessageList
+      :messages="messages"
+      @message-remove="removeMessageFromDatabase"
+    />
+    <FormSendMessage @message-send="addMessageToDatabase" />
   </v-card>
 </template>
 
@@ -40,11 +43,18 @@ export default {
     }
   },
 
+  watch: {
+    lastMessage: "updateChatLastMessage"
+  },
+
   created() {
     this.fetchMessages();
   },
 
   methods: {
+    updateChatLastMessage(value) {
+      chatsRef.child(this.id).update({ lastMessage: value });
+    },
     fetchMessages() {
       messagesRef.child(this.id).on("child_added", snapshot => {
         this.messages.push({ id: snapshot.key, ...snapshot.val() });
@@ -62,22 +72,11 @@ export default {
         this.messages.splice(removedMessageIndex, 1);
       });
     },
-    async onMessageDelete(messageId) {
-      await this.deleteMessageFromDatabase(messageId);
-      this.updateChatLastMessage();
+    removeMessageFromDatabase(messageId) {
+      messagesRef.child(`${this.id}/${messageId}`).remove();
     },
-    async deleteMessageFromDatabase(messageId) {
-      await messagesRef.child(`${this.id}/${messageId}`).remove();
-    },
-    updateChatLastMessage() {
-      chatsRef.child(this.id).update({ lastMessage: this.lastMessage });
-    },
-    async onMessageSend(message) {
-      await this.addMessageToDatabase(message);
-      this.updateChatLastMessage();
-    },
-    async addMessageToDatabase(message) {
-      await messagesRef.child(this.id).push(message);
+    addMessageToDatabase(message) {
+      messagesRef.child(this.id).push(message);
     }
   }
 };
