@@ -1,9 +1,8 @@
-import Vue from "vue";
 import { chatsRef, usersRef } from "@/configs/firebase";
 
 export default {
   state: {
-    chats: {}
+    chats: []
   },
   getters: {
     chats(state) {
@@ -11,14 +10,19 @@ export default {
     }
   },
   mutations: {
-    setChat(state, { id, value }) {
-      Vue.set(state.chats, id, value);
+    pushToChats(state, chat) {
+      state.chats.push(chat);
     },
-    deleteChat(state, id) {
-      Vue.delete(state.chats, id);
+    setChatProperty(state, { chatId, property }) {
+      const chat = state.chats.find(chat => chat.id === chatId);
+      chat[property.key] = property.value;
+    },
+    removeChat(state, id) {
+      const chatIndex = state.chats.findIndex(chat => chat.id === id);
+      state.chats.splice(chatIndex, 1);
     },
     unsetChats(state) {
-      state.chats = {};
+      state.chats = [];
     }
   },
   actions: {
@@ -26,15 +30,21 @@ export default {
       usersRef
         .child(`${rootState.user.currentUser.uid}/chats`)
         .on("child_added", ({ key }) => {
-          chatsRef.child(key).on("value", snapshot => {
-            commit("setChat", { id: key, value: snapshot.val() });
+          chatsRef.child(key).once("value", snapshot => {
+            commit("pushToChats", { id: key, ...snapshot.val() });
+          });
+          chatsRef.child(key).on("child_changed", snapshot => {
+            commit("setChatProperty", {
+              chatId: key,
+              property: { key: snapshot.key, value: snapshot.val() }
+            });
           });
         });
       usersRef
         .child(`${rootState.user.currentUser.uid}/chats`)
         .on("child_removed", ({ key }) => {
           chatsRef.child(key).off();
-          commit("deleteChat", key);
+          commit("removeChat", key);
         });
     },
     clearChats({ commit }) {

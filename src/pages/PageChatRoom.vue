@@ -27,13 +27,13 @@ export default {
 
   data() {
     return {
-      messages: {}
+      messages: []
     };
   },
 
   computed: {
     lastMessage() {
-      const lastMessage = Object.values(this.messages).pop();
+      const [lastMessage] = this.messages.slice(-1);
       return lastMessage
         ? `${lastMessage.sender.name}: ${lastMessage.text}`
         : "";
@@ -47,13 +47,19 @@ export default {
   methods: {
     fetchMessages() {
       messagesRef.child(this.id).on("child_added", snapshot => {
-        this.$set(this.messages, snapshot.key, snapshot.val());
+        this.messages.push({ id: snapshot.key, ...snapshot.val() });
       });
       messagesRef.child(this.id).on("child_changed", snapshot => {
-        this.messages[snapshot.key].text = snapshot.val().text;
+        const updatedMessage = this.messages.find(
+          message => message.id === snapshot.key
+        );
+        updatedMessage.text = snapshot.val().text;
       });
       messagesRef.child(this.id).on("child_removed", ({ key }) => {
-        this.$delete(this.messages, key);
+        const removedMessageIndex = this.messages.findIndex(
+          message => message.id === key
+        );
+        this.messages.splice(removedMessageIndex, 1);
       });
     },
     async onMessageDelete(messageId) {

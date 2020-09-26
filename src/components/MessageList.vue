@@ -2,10 +2,10 @@
   <v-card class="px-4 flex-fill d-flex flex-column align-start">
     <v-spacer></v-spacer>
     <MessageListItem
-      v-for="[id, message] in Object.entries(messages)"
-      :key="id"
+      v-for="message in messages"
+      :key="message.id"
       :message="message"
-      @delete-button-click="onDeleteButtonClick(id)"
+      @delete-button-click="onDeleteButtonClick(message.id)"
     />
   </v-card>
 </template>
@@ -22,7 +22,7 @@ export default {
 
   props: {
     messages: {
-      type: Object,
+      type: Array,
       required: true
     }
   },
