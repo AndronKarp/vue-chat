@@ -2,9 +2,16 @@
   <v-card class="fill-height d-flex flex-column" tile>
     <MessageList
       :messages="messages"
+      @editing-start="onEditingStart"
       @message-remove="removeMessageFromDatabase"
     />
-    <FormSendMessage @message-send="addMessageToDatabase" />
+    <FormEditMessage
+      v-if="editableMessage"
+      :message="editableMessage"
+      @editing-cancel="onEditingCancel"
+      @editing-confirm="updateMessageText"
+    />
+    <FormSendMessage v-else @message-send="addMessageToDatabase" />
   </v-card>
 </template>
 
@@ -12,13 +19,15 @@
 import FormSendMessage from "../components/FormSendMessage";
 import MessageList from "../components/MessageList";
 import { messagesRef, chatsRef } from "../configs/firebase";
+import FormEditMessage from "../components/FormEditMessage";
 
 export default {
   name: "PageChatRoom",
 
   components: {
     FormSendMessage,
-    MessageList
+    MessageList,
+    FormEditMessage
   },
 
   props: {
@@ -30,7 +39,8 @@ export default {
 
   data() {
     return {
-      messages: []
+      messages: [],
+      editableMessage: null
     };
   },
 
@@ -72,8 +82,18 @@ export default {
         this.messages.splice(removedMessageIndex, 1);
       });
     },
+    onEditingStart(message) {
+      this.editableMessage = message;
+    },
+    onEditingCancel() {
+      this.editableMessage = null;
+    },
     removeMessageFromDatabase(messageId) {
       messagesRef.child(`${this.id}/${messageId}`).remove();
+    },
+    updateMessageText({ messageId, text }) {
+      messagesRef.child(`${this.id}/${messageId}`).update({ text });
+      this.onEditingCancel();
     },
     addMessageToDatabase(message) {
       messagesRef.child(this.id).push(message);

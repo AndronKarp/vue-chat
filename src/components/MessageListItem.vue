@@ -19,6 +19,11 @@
           </template>
 
           <v-list>
+            <v-list-item @click="$emit('edit-button-click')">
+              <v-list-item-content>
+                <v-list-item-title>Edit</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
             <v-list-item @click="removeMessage">
               <v-list-item-content>
                 <v-list-item-title>Remove</v-list-item-title>
