@@ -17,7 +17,6 @@
           icon
           small
           type="submit"
-          style="top: -2px"
           color="primary"
         >
           <v-icon>mdi-send</v-icon>
