@@ -24,9 +24,9 @@
                 <v-list-item-title>Edit</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item @click="removeMessage">
+            <v-list-item @click="$emit('delete-button-click')">
               <v-list-item-content>
-                <v-list-item-title>Remove</v-list-item-title>
+                <v-list-item-title>Delete</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list>
@@ -53,12 +53,6 @@ export default {
     ...mapGetters(["currentUser"]),
     isCurrentUserSender() {
       return this.currentUser.uid === this.message.sender.id;
-    }
-  },
-
-  methods: {
-    removeMessage() {
-      this.$emit("remove-button-click");
     }
   }
 };

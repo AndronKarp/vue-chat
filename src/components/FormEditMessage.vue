@@ -1,6 +1,6 @@
 <template>
   <v-form
-    @submit.prevent="editMessage(message)"
+    @submit.prevent="confirmEditing(message)"
     style="position: sticky; bottom: 0; width: 100%"
   >
     <v-alert class="pa-3 mb-0" icon="mdi-pencil" elevation="2" tile>
@@ -14,7 +14,7 @@
       </v-row>
     </v-alert>
     <v-text-field
-      v-model="text"
+      v-model="messageText"
       class="rounded-0"
       type="text"
       placeholder="New message..."
@@ -31,12 +31,12 @@
 </template>
 
 <script>
-import isMessageEmpty from "../mixins/is-message-empty";
+import message from "../mixins/message";
 
 export default {
   name: "FormEditMessage",
 
-  mixins: [isMessageEmpty],
+  mixins: [message],
 
   props: {
     message: {
@@ -45,17 +45,17 @@ export default {
     }
   },
 
-  data() {
-    return {
-      text: this.message.text
-    };
+  created() {
+    this.setMessageText(this.message.text);
   },
 
   methods: {
-    editMessage({ id }) {
-      this.$emit("editing-confirm", { messageId: id, text: this.text });
+    confirmEditing({ id }) {
+      this.$emit("editing-confirm", { messageId: id, text: this.messageText });
+      this.cancelEditing();
     },
     cancelEditing() {
+      this.setMessageText("");
       this.$emit("editing-cancel");
     }
   }

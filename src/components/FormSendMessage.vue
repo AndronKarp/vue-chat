@@ -4,7 +4,7 @@
     style="position: sticky; bottom: 0; width: 100%"
   >
     <v-text-field
-      v-model="text"
+      v-model="messageText"
       class="rounded-0"
       type="text"
       placeholder="Write your message..."
@@ -27,19 +27,13 @@
 </template>
 
 <script>
-import isMessageEmpty from "../mixins/is-message-empty";
+import message from "../mixins/message";
 import { mapGetters } from "vuex";
 
 export default {
   name: "FormSendMessage",
 
-  mixins: [isMessageEmpty],
-
-  data() {
-    return {
-      text: ""
-    };
-  },
+  mixins: [message],
 
   computed: {
     ...mapGetters(["currentUser"])
@@ -48,10 +42,10 @@ export default {
   methods: {
     sendMessage() {
       this.$emit("message-send", {
-        text: this.text,
+        text: this.messageText,
         sender: { id: this.currentUser.uid, name: this.currentUser.displayName }
       });
-      this.text = "";
+      this.setMessageText("");
     }
   }
 };

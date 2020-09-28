@@ -6,7 +6,7 @@
       :key="message.id"
       :message="message"
       @edit-button-click="$emit('editing-start', message)"
-      @remove-button-click="onRemoveButtonClick(message.id)"
+      @delete-button-click="$emit('message-delete', message.id)"
     />
   </v-card>
 </template>
@@ -25,12 +25,6 @@ export default {
     messages: {
       type: Array,
       required: true
-    }
-  },
-
-  methods: {
-    onRemoveButtonClick(messageId) {
-      this.$emit("message-remove", messageId);
     }
   }
 };

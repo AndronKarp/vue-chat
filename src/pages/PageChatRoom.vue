@@ -2,14 +2,14 @@
   <v-card class="fill-height d-flex flex-column" tile>
     <MessageList
       :messages="messages"
-      @editing-start="onEditingStart"
-      @message-remove="removeMessageFromDatabase"
+      @editing-start="setEditableMessage"
+      @message-delete="deleteMessageFromDatabase"
     />
     <FormEditMessage
       v-if="editableMessage"
       :message="editableMessage"
-      @editing-cancel="onEditingCancel"
-      @editing-confirm="updateMessageText"
+      @editing-cancel="setEditableMessage(null)"
+      @editing-confirm="updateMessageTextInDatabase"
     />
     <FormSendMessage v-else @message-send="addMessageToDatabase" />
   </v-card>
@@ -82,18 +82,14 @@ export default {
         this.messages.splice(removedMessageIndex, 1);
       });
     },
-    onEditingStart(message) {
-      this.editableMessage = message;
+    setEditableMessage(value) {
+      this.editableMessage = value;
     },
-    onEditingCancel() {
-      this.editableMessage = null;
-    },
-    removeMessageFromDatabase(messageId) {
+    deleteMessageFromDatabase(messageId) {
       messagesRef.child(`${this.id}/${messageId}`).remove();
     },
-    updateMessageText({ messageId, text }) {
+    updateMessageTextInDatabase({ messageId, text }) {
       messagesRef.child(`${this.id}/${messageId}`).update({ text });
-      this.onEditingCancel();
     },
     addMessageToDatabase(message) {
       messagesRef.child(this.id).push(message);
