@@ -32,7 +32,7 @@ const routes = [
   },
   {
     path: "/reg",
-    name: "Registration",
+    name: "PageRegistration",
     meta: {
       requiresUnauthorizedUser: true,
       layout: FormLayout
@@ -42,7 +42,7 @@ const routes = [
   },
   {
     path: "/auth",
-    name: "Authorization",
+    name: "PageAuthorization",
     meta: {
       requiresUnauthorizedUser: true,
       layout: FormLayout
