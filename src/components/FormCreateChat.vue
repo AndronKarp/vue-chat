@@ -27,7 +27,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn text @click="hideForm">Cancel</v-btn>
+        <v-btn text @click="finishCreating">Cancel</v-btn>
         <v-btn text :disabled="!form.title" @click="createChat">Create</v-btn>
       </v-card-actions>
     </v-card>
@@ -54,16 +54,23 @@ export default {
 
   methods: {
     async createChat() {
+      await this.addChatToDatabase();
+      this.finishCreating();
+    },
+    async addChatToDatabase() {
       const { title } = this.form;
-
       const { key } = await chatsRef.push({ title, lastMessage: "" });
       await usersRef.child(`${this.currentUser.uid}/chats/${key}`).set(true);
-
+    },
+    finishCreating() {
+      this.resetForm();
       this.hideForm();
+    },
+    resetForm() {
+      this.form.title = "";
     },
     hideForm() {
       this.isVisible = false;
-      this.form.title = "";
     }
   }
 };
