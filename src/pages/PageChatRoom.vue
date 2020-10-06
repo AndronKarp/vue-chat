@@ -8,7 +8,7 @@
     <FormEditMessage
       v-if="editableMessage"
       :message="editableMessage"
-      @editing-cancel="setEditableMessage(null)"
+      @editing-finish="setEditableMessage(null)"
       @editing-confirm="updateMessageTextInDatabase"
     />
     <FormSendMessage v-else @message-send="addMessageToDatabase" />

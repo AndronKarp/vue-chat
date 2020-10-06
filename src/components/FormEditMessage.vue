@@ -7,7 +7,7 @@
       <v-row no-gutters align="center">
         <v-col class="grow">Editing message</v-col>
         <v-col class="shrink">
-          <v-btn icon small @click="cancelEditing">
+          <v-btn icon small @click="finishEditing">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-col>
@@ -52,11 +52,11 @@ export default {
   methods: {
     confirmEditing({ id }) {
       this.$emit("editing-confirm", { messageId: id, text: this.messageText });
-      this.cancelEditing();
+      this.finishEditing();
     },
-    cancelEditing() {
+    finishEditing() {
       this.setMessageText("");
-      this.$emit("editing-cancel");
+      this.$emit("editing-finish");
     }
   }
 };
