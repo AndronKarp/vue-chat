@@ -11,7 +11,7 @@ import ChatList from "../components/ChatList";
 import FormCreateChat from "../components/FormCreateChat";
 
 export default {
-  name: "PageChatList",
+  name: "PageChats",
 
   components: {
     ChatList,
