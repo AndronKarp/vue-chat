@@ -39,6 +39,8 @@ import { mapGetters } from "vuex";
 import { usersRef, chatsRef } from "../configs/firebase";
 
 export default {
+  name: "FormCreateChat",
+
   data() {
     return {
       form: {
