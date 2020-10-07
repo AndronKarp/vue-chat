@@ -9,6 +9,10 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
+    redirect: { name: "PageChats" }
+  },
+  {
+    path: "/chats",
     name: "PageChats",
     meta: {
       title: "Vue Chat",
@@ -66,9 +70,9 @@ router.beforeEach(async (to, from, next) => {
   );
   const userIsAuthorized = await auth.getCurrentUser();
   if (userIsAuthorized) {
-    routeRequiresUnauthorizedUser ? next("/") : next();
+    routeRequiresUnauthorizedUser ? next({ name: "PageChats" }) : next();
   } else {
-    routeRequiresAuth ? next("/auth") : next();
+    routeRequiresAuth ? next({ name: "PageAuthorization" }) : next();
   }
 });
 
