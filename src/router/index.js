@@ -38,6 +38,7 @@ const routes = [
     path: "/reg",
     name: "PageRegistration",
     meta: {
+      title: "Create your account",
       requiresUnauthorizedUser: true,
       layout: FormLayout
     },
@@ -48,6 +49,7 @@ const routes = [
     path: "/auth",
     name: "PageAuthorization",
     meta: {
+      title: "Sign into your account",
       requiresUnauthorizedUser: true,
       layout: FormLayout
     },

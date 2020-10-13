@@ -1,36 +1,29 @@
 <template>
-  <v-card class="elevation-12">
-    <v-toolbar dark flat color="amber darken-4">
-      <v-toolbar-title>Create your account</v-toolbar-title>
-    </v-toolbar>
-    <v-card-text
-      ><v-form @submit.prevent="register" class="text-center">
-        <v-text-field
-          v-for="(field, index) in Object.keys(form)"
-          :key="index"
-          v-model="$v.form[field].value.$model"
-          :label="form[field].label"
-          :type="form[field].type"
-          :error-messages="validationErrorMessages(field)"
-          :success="!$v.form[field].$invalid"
-          outlined
-          dense
-        ></v-text-field>
-        <p>
-          Already have an account?
-          <router-link to="/auth">Sign in!</router-link>
-        </p>
-        <v-btn
-          type="submit"
-          color="amber darken-4"
-          :dark="!$v.form.$invalid"
-          :disabled="$v.form.$invalid"
-          :loading="isFormSubmitting"
-          >Sign Up</v-btn
-        >
-      </v-form>
-    </v-card-text>
-  </v-card>
+  <v-form @submit.prevent="register" class="text-center">
+    <v-text-field
+      v-for="(field, index) in Object.keys(form)"
+      :key="index"
+      v-model="$v.form[field].value.$model"
+      :label="form[field].label"
+      :type="form[field].type"
+      :error-messages="validationErrorMessages(field)"
+      :success="!$v.form[field].$invalid"
+      outlined
+      dense
+    ></v-text-field>
+    <p>
+      Already have an account?
+      <router-link to="/auth">Sign in!</router-link>
+    </p>
+    <v-btn
+      type="submit"
+      color="amber darken-4"
+      :dark="!$v.form.$invalid"
+      :disabled="$v.form.$invalid"
+      :loading="isFormSubmitting"
+      >Sign Up</v-btn
+    >
+  </v-form>
 </template>
 
 <script>
