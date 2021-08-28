@@ -1,36 +1,65 @@
 <template>
-  <v-form @submit.prevent="register" class="text-center">
-    <v-text-field
-      v-for="(field, index) in Object.keys(form)"
-      :key="index"
-      v-model="$v.form[field].value.$model"
-      :label="form[field].label"
-      :type="form[field].type"
-      :error-messages="validationErrorMessages(field)"
-      :success="!$v.form[field].$invalid"
+  <VForm @submit.prevent="register" class="d-flex flex-column">
+    <VTextField
+      v-model="$v.form.displayName.$model"
+      label="Name"
+      :error-messages="errorMessage('displayName')"
+      :success="!$v.form.displayName.$invalid"
       outlined
       dense
-    ></v-text-field>
-    <p>
+    />
+    <VTextField
+      :value="form.email"
+      label="E-mail"
+      type="email"
+      :error-messages="errorMessage('email')"
+      :success="!$v.form.email.$invalid"
+      outlined
+      dense
+      @change="onEmailChange"
+    />
+    <VTextField
+      v-model="$v.form.password.$model"
+      label="Password"
+      type="password"
+      :error-messages="errorMessage('password')"
+      :success="!$v.form.password.$invalid"
+      outlined
+      dense
+    />
+    <VTextField
+      v-model="$v.form.confirmPassword.$model"
+      label="Confirm password"
+      type="password"
+      :error-messages="errorMessage('confirmPassword')"
+      :success="!$v.form.confirmPassword.$invalid"
+      outlined
+      dense
+    />
+    <span class="align-self-center mb-4">
       Already have an account?
-      <router-link to="/auth">Sign in!</router-link>
-    </p>
-    <v-btn
+      <RouterLink to="/auth">Sign in!</RouterLink>
+    </span>
+    <VBtn
+      class="align-self-center"
       type="submit"
       color="amber darken-4"
       :dark="!$v.form.$invalid"
       :disabled="$v.form.$invalid"
       :loading="isFormSubmitting"
-      >Sign Up</v-btn
+      >Sign Up</VBtn
     >
-  </v-form>
+  </VForm>
 </template>
 
 <script>
 import { validationMixin } from "vuelidate";
 import * as validators from "vuelidate/lib/validators";
-import { auth } from "../firebase";
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
+
+import { auth, userEmailsRef } from "@/firebase";
+import { registrationErrors } from "@/utils/constants";
+import { isEmailUnique } from "@/utils/validators";
 
 export default {
   name: "PageRegistration",
@@ -40,128 +69,71 @@ export default {
   data() {
     return {
       form: {
-        name: {
-          type: "text",
-          label: "Name",
-          validations: {
-            required: {
-              rule: validators.required,
-              errorMessage: "Required field"
-            },
-            alpha: {
-              rule: validators.alpha,
-              errorMessage: "Name must contain only letters"
-            },
-            minLength: {
-              rule: validators.minLength(2),
-              errorMessage: "Name must have at least 2 characters"
-            }
-          },
-          value: null
-        },
-        email: {
-          type: "email",
-          label: "E-mail",
-          validations: {
-            required: {
-              rule: validators.required,
-              errorMessage: "Required field"
-            },
-            email: {
-              rule: validators.email,
-              errorMessage: "Invalid e-mail"
-            },
-            unique: {
-              rule(email) {
-                return !this.isEmailTaken(email);
-              },
-              errorMessage: "E-mail is already taken"
-            }
-          },
-          value: null
-        },
-        password: {
-          type: "password",
-          label: "Password",
-          validations: {
-            required: {
-              rule: validators.required,
-              errorMessage: "Required field"
-            },
-            alphaNum: {
-              rule: validators.alphaNum,
-              errorMessage: "Password must contain only letters and/or numbers"
-            },
-            minLength: {
-              rule: validators.minLength(6),
-              errorMessage: "Password must contain at least 6 characters"
-            }
-          },
-          value: null
-        },
-        confirmPassword: {
-          type: "password",
-          label: "Confirm password",
-          validations: {
-            required: {
-              rule: validators.required,
-              errorMessage: "Required field"
-            },
-            sameAsPassword: {
-              rule: validators.sameAs(function() {
-                return this.form.password.value;
-              }),
-              errorMessage: "Passwords don't match"
-            }
-          },
-          value: null
-        }
+        displayName: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
       },
       isFormSubmitting: false
     };
   },
 
-  validations() {
-    const form = {};
-    const formFields = Object.entries(this.form);
-    formFields.forEach(([fieldName, field]) => {
-      const value = {};
-      const validations = Object.entries(field.validations);
-      validations.forEach(([validationName, validation]) => {
-        value[validationName] = validation.rule;
-      });
-      form[fieldName] = { value };
-    });
-    return { form };
+  validations: {
+    form: {
+      displayName: {
+        required: validators.required,
+        alpha: validators.alpha,
+        minLength: validators.minLength(2)
+      },
+      email: {
+        required: validators.required,
+        email: validators.email,
+        unique: isEmailUnique
+      },
+      password: {
+        required: validators.required,
+        alphaNum: validators.alphaNum,
+        minLength: validators.minLength(6)
+      },
+      confirmPassword: {
+        required: validators.required,
+        sameAsPassword: validators.sameAs(function() {
+          return this.form.password;
+        })
+      }
+    }
   },
 
   computed: {
-    ...mapGetters(["currentUser", "isEmailTaken"]),
-    validationErrorMessages: () =>
+    ...mapState({ user: "user/user" }),
+    errorMessage: () =>
       function(field) {
-        const errorMessages = [];
-        if (!this.$v.form[field].value.$dirty) return errorMessages;
-        const validations = Object.entries(this.form[field].validations);
-        validations.forEach(([name, validation]) => {
-          !this.$v.form[field].value[name] &&
-            errorMessages.push(validation.errorMessage);
-        });
-        return errorMessages;
+        if (!this.$v.form[field].$error) return;
+
+        const errorMessages = Object.entries(registrationErrors[field]);
+        const [, errorMessage] =
+          errorMessages.find(([k]) => !this.$v.form[field][k]) ?? [];
+        return errorMessage;
       }
   },
 
   methods: {
     async register() {
       this.isFormSubmitting = true;
-      await auth.createUserWithEmailAndPassword(
-        this.form.email.value,
-        this.form.password.value
+      const { email, password, displayName } = this.form;
+      const { user } = await auth.createUserWithEmailAndPassword(
+        email,
+        password
       );
-      await this.currentUser.updateProfile({
-        displayName: this.form.name.value
-      });
-      this.$router.push("/");
+      await user.updateProfile({ displayName });
+      this.$store.dispatch("user/authorize", { ...user, displayName });
+      await userEmailsRef.child(user.uid).set({ value: email });
+      this.$router.push({ name: "PageChats" });
       this.isFormSubmitting = false;
+    },
+    onEmailChange(v) {
+      this.form.email = v;
+      this.$v.form.email.$touch();
     }
   }
 };

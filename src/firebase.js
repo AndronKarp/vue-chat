@@ -15,6 +15,7 @@ firebase.initializeApp(config);
 
 const database = firebase.database();
 const usersRef = database.ref("users");
+const userEmailsRef = database.ref("userEmails");
 const chatsRef = database.ref("chats");
 const messagesRef = database.ref("messages");
 const auth = firebase.auth();
@@ -27,4 +28,4 @@ auth.getCurrentUser = () => {
   });
 };
 
-export { usersRef, chatsRef, messagesRef, auth };
+export { usersRef, userEmailsRef, chatsRef, messagesRef, auth };
