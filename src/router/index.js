@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import { auth } from "../configs/firebase";
+import { auth } from "../firebase";
 import MainLayout from "../layouts/MainLayout";
 import FormLayout from "../layouts/FormLayout";
 

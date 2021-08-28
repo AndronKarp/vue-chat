@@ -34,7 +34,7 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import { auth } from "../configs/firebase";
+import { auth } from "../firebase";
 
 export default {
   name: "PageAuthorization",

@@ -18,7 +18,7 @@
 <script>
 import FormSendMessage from "../components/FormSendMessage";
 import MessageList from "../components/MessageList";
-import { messagesRef, chatsRef } from "../configs/firebase";
+import { messagesRef, chatsRef } from "../firebase";
 import FormEditMessage from "../components/FormEditMessage";
 
 export default {

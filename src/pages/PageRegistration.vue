@@ -29,7 +29,7 @@
 <script>
 import { validationMixin } from "vuelidate";
 import * as validators from "vuelidate/lib/validators";
-import { auth } from "../configs/firebase";
+import { auth } from "../firebase";
 import { mapGetters } from "vuex";
 
 export default {

@@ -1,4 +1,4 @@
-import { chatsRef, usersRef } from "@/configs/firebase";
+import { chatsRef, usersRef } from "@/firebase";
 
 export default {
   state: {

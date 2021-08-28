@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { auth } from "../configs/firebase";
+import { auth } from "../firebase";
 
 export default {
   name: "TheNav",
