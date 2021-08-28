@@ -9,13 +9,13 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "TheHeader",
 
   computed: {
-    ...mapGetters(["currentUser"])
+    ...mapState({ user: "user/user" })
   },
 
   methods: {

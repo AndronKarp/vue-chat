@@ -1,20 +1,16 @@
 export default {
+  namespaced: true,
   state: {
-    currentUser: null
-  },
-  getters: {
-    currentUser(state) {
-      return state.currentUser;
-    }
+    user: null
   },
   mutations: {
-    updateCurrentUser(state, user) {
-      state.currentUser = user;
+    setUser(state, v) {
+      state.user = v;
     }
   },
   actions: {
     authorize(store, user) {
-      store.commit("updateCurrentUser", user);
+      store.commit("setUser", user);
     }
   }
 };

@@ -7,22 +7,7 @@
 </template>
 
 <script>
-import { auth } from "./firebase";
-
 export default {
-  name: "App",
-
-  created() {
-    this.setAuthObserver();
-  },
-
-  methods: {
-    setAuthObserver() {
-      auth.onAuthStateChanged(user => {
-        this.$store.dispatch("authorize", user);
-        if (user) this.$store.dispatch("fetchChats");
-      });
-    }
-  }
+  name: "App"
 };
 </script>
