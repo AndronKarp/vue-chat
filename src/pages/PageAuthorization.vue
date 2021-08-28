@@ -1,40 +1,42 @@
 <template>
-  <v-form @submit.prevent="signIn" class="text-center">
-    <v-text-field
+  <VForm @submit.prevent="signIn" class="d-flex flex-column">
+    <VTextField
       v-model="$v.form.email.$model"
       label="E-mail"
       type="email"
-      :error="authError"
+      :error="isError"
       outlined
       dense
-    ></v-text-field>
-    <v-text-field
+    />
+    <VTextField
       v-model="$v.form.password.$model"
       label="Password"
       type="password"
-      :error-messages="authErrorMessage"
+      :error-messages="errorMessage"
       outlined
       dense
-    ></v-text-field>
-    <p>
+    />
+    <span class="mb-4 align-self-center">
       Don't have an account?
-      <router-link to="/reg">Create it now!</router-link>
-    </p>
-    <v-btn
+      <RouterLink :to="{ name: 'PageRegistration' }">Create it now!</RouterLink>
+    </span>
+    <VBtn
       type="submit"
       color="amber darken-4"
-      :dark="!$v.form.$invalid"
-      :disabled="$v.form.$invalid"
-      :loading="isFormSubmitting"
-      >Sign In</v-btn
+      :dark="!$v.$invalid"
+      :disabled="$v.$invalid"
+      :loading="isSubmitting"
+      class="align-self-center"
+      >Sign In</VBtn
     >
-  </v-form>
+  </VForm>
 </template>
 
 <script>
 import { validationMixin } from "vuelidate";
 import { required } from "vuelidate/lib/validators";
-import { auth } from "../firebase";
+
+import { auth } from "@/firebase";
 
 export default {
   name: "PageAuthorization",
@@ -44,11 +46,11 @@ export default {
   data() {
     return {
       form: {
-        email: null,
-        password: null
+        email: "",
+        password: ""
       },
-      authError: false,
-      isFormSubmitting: false
+      isError: false,
+      isSubmitting: false
     };
   },
 
@@ -60,22 +62,20 @@ export default {
   },
 
   computed: {
-    authErrorMessage() {
-      return this.authError ? "Invalid e-mail or password" : null;
+    errorMessage() {
+      return this.isError ? "Invalid e-mail or password" : "";
     }
   },
 
   methods: {
     signIn() {
-      this.authError = false;
-      this.isFormSubmitting = true;
+      this.isError = false;
+      this.isSubmitting = true;
       auth
         .signInWithEmailAndPassword(this.form.email, this.form.password)
-        .then(() => this.$router.push("/"))
-        .catch(() => {
-          this.authError = true;
-        })
-        .finally(() => (this.isFormSubmitting = false));
+        .then(() => this.$router.push({ name: "PageChats" }))
+        .catch(() => (this.isError = true))
+        .finally(() => (this.isSubmitting = false));
     }
   }
 };
