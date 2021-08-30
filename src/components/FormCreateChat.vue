@@ -3,14 +3,15 @@
     <template #activator="{ on, attrs }">
       <v-btn
         fab
-        color="amber darken-4"
         fixed
         bottom
         right
+        color="primary"
+        dark
         v-bind="attrs"
         v-on="on"
       >
-        <v-icon color="white">mdi-plus</v-icon>
+        <v-icon>mdi-plus</v-icon>
       </v-btn>
     </template>
 

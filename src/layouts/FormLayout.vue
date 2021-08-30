@@ -4,7 +4,7 @@
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="5" xl="4">
           <v-card class="elevation-12">
-            <v-toolbar dark flat color="amber darken-4">
+            <v-toolbar flat color="primary" dark>
               <v-toolbar-title>{{ $route.meta.title }}</v-toolbar-title>
             </v-toolbar>
             <v-card-text>

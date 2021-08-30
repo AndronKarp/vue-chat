@@ -22,7 +22,7 @@
     </span>
     <VBtn
       type="submit"
-      color="amber darken-4"
+      color="primary"
       :dark="!$v.$invalid"
       :disabled="$v.$invalid"
       :loading="isSubmitting"

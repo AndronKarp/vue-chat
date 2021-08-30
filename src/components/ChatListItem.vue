@@ -1,6 +1,6 @@
 <template>
   <v-list-item :to="{ name: 'PageChatRoom', params: { id: chat.id } }">
-    <v-list-item-avatar color="amber darken-4">
+    <v-list-item-avatar color="primary">
       <slot name="avatar" :avatar="chat.avatar">
         <v-icon color="white">mdi-chat</v-icon>
       </slot>

@@ -43,7 +43,7 @@
     <VBtn
       class="align-self-center"
       type="submit"
-      color="amber darken-4"
+      color="primary"
       :dark="!$v.form.$invalid"
       :disabled="$v.form.$invalid"
       :loading="isFormSubmitting"

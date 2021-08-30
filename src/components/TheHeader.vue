@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app color="amber darken-4" dark>
+  <v-app-bar app color="primary" dark>
     <v-app-bar-nav-icon v-if="$route.name === 'PageChats'" @click="toggleNav" />
     <v-btn v-else icon @click="backToChats">
       <v-icon>mdi-arrow-left</v-icon>
