@@ -1,15 +1,11 @@
 <template>
-  <v-list two-line class="pa-0">
-    <chat-list-item v-for="chat in chats" :chat="chat" :key="chat.id">
-      <template #avatar="{ avatar }">
-        <img v-if="avatar" :src="avatar" alt="Chat avatar" />
-      </template>
-    </chat-list-item>
-  </v-list>
+  <VList two-line class="pa-0">
+    <ChatListItem v-for="chat in chats" :chat="chat" :key="chat.id" />
+  </VList>
 </template>
 
 <script>
-import ChatListItem from "./ChatListItem";
+import ChatListItem from "@/components/ChatListItem";
 
 export default {
   name: "ChatList",
@@ -26,5 +22,3 @@ export default {
   }
 };
 </script>
-
-<style></style>

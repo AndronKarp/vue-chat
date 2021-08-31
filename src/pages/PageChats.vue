@@ -1,12 +1,11 @@
 <template>
-  <v-card class="fill-height" tile>
+  <VCard class="fill-height" tile>
     <ChatList :chats="chats" />
     <FormCreateChat />
-  </v-card>
+  </VCard>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import ChatList from "../components/ChatList";
 import FormCreateChat from "../components/FormCreateChat";
 
@@ -18,10 +17,10 @@ export default {
     FormCreateChat
   },
 
-  computed: {
-    ...mapGetters(["chats"])
+  data() {
+    return {
+      chats: []
+    };
   }
 };
 </script>
-
-<style></style>
