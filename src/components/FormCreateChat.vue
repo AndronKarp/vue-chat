@@ -1,7 +1,7 @@
 <template>
-  <v-dialog v-model="isVisible" max-width="500">
+  <VDialog v-model="isShown" max-width="500">
     <template #activator="{ on, attrs }">
-      <v-btn
+      <VBtn
         fab
         fixed
         bottom
@@ -11,33 +11,49 @@
         v-bind="attrs"
         v-on="on"
       >
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
+        <VIcon>mdi-plus</VIcon>
+      </VBtn>
     </template>
-
-    <v-card>
-      <v-card-title>Create chat</v-card-title>
-      <v-card-text>
-        <v-text-field
-          v-model="form.title"
-          label="Chat title"
-          type="text"
-          outlined
-          dense
-        ></v-text-field>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn text @click="finishCreating">Cancel</v-btn>
-        <v-btn text :disabled="!form.title" @click="createChat">Create</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+    <VCard>
+      <VCardTitle>Create chat</VCardTitle>
+      <VForm class="px-2" @submit.prevent="createChat">
+        <VCardText class="pt-0">
+          <VTextField
+            v-model="form.title"
+            label="Chat title"
+            type="text"
+            outlined
+            dense
+            hide-details
+          />
+        </VCardText>
+        <VCardActions>
+          <VSpacer />
+          <VBtn
+            text
+            color="primary"
+            :disabled="isSubmitting"
+            @click="cancelCreating"
+            >Cancel</VBtn
+          >
+          <VBtn
+            text
+            color="primary"
+            type="submit"
+            :disabled="!form.title"
+            :loading="isSubmitting"
+            >Create</VBtn
+          >
+        </VCardActions>
+      </VForm>
+    </VCard>
+  </VDialog>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { usersRef, chatsRef } from "../firebase";
+import { mapState } from "vuex";
+
+import { chatsRef, usersRef } from "@/firebase";
 
 export default {
   name: "FormCreateChat",
@@ -47,36 +63,28 @@ export default {
       form: {
         title: ""
       },
-      isVisible: false
+      isShown: false,
+      isSubmitting: false
     };
   },
 
   computed: {
-    ...mapGetters(["currentUser"])
+    ...mapState("user", { user: "user" })
   },
 
   methods: {
-    async createChat() {
-      await this.addChatToDatabase();
-      this.finishCreating();
+    cancelCreating() {
+      this.form.title = "";
+      this.isShown = false;
     },
-    async addChatToDatabase() {
+    async createChat() {
+      this.isSubmitting = true;
       const { title } = this.form;
       const { key } = await chatsRef.push({ title, lastMessage: "" });
-      await usersRef.child(`${this.currentUser.uid}/chats/${key}`).set(true);
-    },
-    finishCreating() {
-      this.resetForm();
-      this.hideForm();
-    },
-    resetForm() {
-      this.form.title = "";
-    },
-    hideForm() {
-      this.isVisible = false;
+      await usersRef.child(`${this.user.uid}/chats/${key}`).set(true);
+      this.isSubmitting = false;
+      this.cancelCreating();
     }
   }
 };
 </script>
-
-<style></style>
